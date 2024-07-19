@@ -1,0 +1,6 @@
+{
+    "bashIde.shellcheckPath": "shellcheck",
+    "bashIde.shfmt.path": "shfmt",
+    "shellcheck.executablePath": "shellcheck",
+    "direnv.path.executable": "direnv",
+}

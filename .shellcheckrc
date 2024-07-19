@@ -1,0 +1,23 @@
+# .shellcheckrc
+
+# Disable specific ShellCheck warnings globally
+disable=SC2034  # Ignore unused variables
+
+# Enable specific ShellCheck warnings globally
+enable=SC2154  # Warn about potentially unassigned variables
+
+# Exclude specific files or directories
+exclude=tests/*
+
+# Define severity levels for warnings
+severity=style  # Can be one of: error, warning, info, style
+
+# Set a color output scheme
+color=auto  # Options: auto, always, never
+
+# Additional options
+external-sources=true  # Follow external sources
+check-sourced-files=true  # Check files that are sourced
+
+# Custom rule inclusion (example)
+# include=/path/to/custom/rules
