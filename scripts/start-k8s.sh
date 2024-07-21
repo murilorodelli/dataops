@@ -22,6 +22,7 @@ ARROW_ICON=""
 cleanup() {
     trap - SIGINT SIGTERM ERR EXIT
     # Perform script cleanup here
+    # Example: remove temporary files, restore system state, etc.
     log "Performing cleanup tasks..."
     # Add your cleanup commands here
     success "Cleanup completed."
@@ -45,37 +46,28 @@ script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 log "Script directory: $script_dir"
 
 # Check if the script is running as sudo
-if [[ "$EUID" -ne 0 ]]; then
-    error "Please run this script as root or with sudo."
+if [[ "$EUID" -eq 0 ]]; then
+    error "Please don't run this script as root or with sudo."
 fi
 
-log "Script is running with superuser privileges."
-
-###############################################################################
-# System Packages
-###############################################################################
-
-# Define the packages to be installed
-packages=(
-    build-essential
-    curl
-    wget
-    file
-    git
-    net-tools
-    procps
-    xattr
-    zsh
-    mysql-client
-)
-
-log "Starting package installation..."
-
-# Install all packages at once
-if sudo apt-get install --assume-yes --quiet --no-install-recommends "${packages[@]}"; then
-    success "Successfully installed all packages: ${packages[*]}"
+# Get the interactive user
+if [[ -n "${SUDO_USER-}" ]]; then
+    interactive_user="$SUDO_USER"
 else
-    error "Failed to install one or more packages: ${packages[*]}"
+    interactive_user="$USER"
 fi
+log "Script is running as $interactive_user without superuser privileges."
 
-success "All packages have been installed successfully."
+
+###############################################################################
+# Start K3D cluster
+###############################################################################
+
+k3d cluster create mycluster \
+    --servers 1 \
+    --agents 2 \
+    --api-port 6550 \
+    --port '80:80@loadbalancer' \
+    --port '443:443@loadbalancer' \
+    --port '5432:5432@loadbalancer' \
+    --port '3306:3306@loadbalancer'

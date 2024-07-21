@@ -67,6 +67,10 @@ packages=(
     shfmt
     shellcheck
     direnv
+    k3d
+    kubectl
+    helm
+    k9s
 )
 
 log "Updating linuxbrew..."
