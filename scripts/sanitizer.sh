@@ -227,7 +227,7 @@ EOL
     return 0
 }
 
-clean_env() {
+update_shell_rc() {
     local profile_file="$HOME_DIR/.profile"
     local profile_guard="PROFILE_SOURCED"
 
@@ -277,17 +277,18 @@ clean_env() {
 
 log "Starting comprehensive cleanup process..."
 
-# clean_temp_files
-# clean_log_files
-# clean_old_backups
-# clean_wsl_files
-# clean_vscode_remote_files
-# clean_docker_k8s_files
-# clean_linuxbrew_files
-# clean_cloud_dev_files
+chown_home_files
+fix_permissions
 
-# fix_permissions
-# chown_home_files
-clean_env
+clean_temp_files
+clean_log_files
+clean_old_backups
+clean_wsl_files
+clean_vscode_remote_files
+clean_docker_k8s_files
+clean_linuxbrew_files
+clean_cloud_dev_files
+
+update_shell_rc
 
 success "Comprehensive home directory cleanup and fixes completed."
