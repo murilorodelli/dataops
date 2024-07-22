@@ -65,7 +65,7 @@ log "Script is running as $interactive_user without superuser privileges."
 # List of install scripts to call
 install_scripts=(
     # call home sanitizer script first
-    "sudo $script_dir/sanitize.sh"
+    "sudo $script_dir/sanitizer.sh"
     # system packages installation
     "sudo $script_dir/install/system-pkgs.sh"
     # docker installation

@@ -1,0 +1,39 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Install dependencies",
+            "type": "shell",
+            "command": "make install",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Run tests",
+            "type": "shell",
+            "command": "make test"
+        },
+        {
+            "label": "Clean",
+            "type": "shell",
+            "command": "make clean"
+        },
+        {
+            "label": "Lint",
+            "type": "shell",
+            "command": "make lint"
+        },
+        {
+            "label": "Format",
+            "type": "shell",
+            "command": "make format"
+        },
+        {
+            "label": "Run application",
+            "type": "shell",
+            "command": "make run"
+        }
+    ]
+}
