@@ -82,24 +82,18 @@ remove_brew_from_shell_rc() {
 }
 
 add_brew_to_shell_rc() {
-    log "Applying changes to zsh and bash startup files if they exist..."
-    for shell_rc in "$HOME/.zshrc" "$HOME/.bashrc"; do
-        if [[ -f "$shell_rc" ]]; then
-            remove_brew_from_shell_rc "$shell_rc"
-            log "Adding Homebrew initialization to $shell_rc..."
-            {
-                echo "# Homebrew environment setup"
-                echo "eval \"\$($HOMEBREW_PREFIX/bin/brew shellenv)\""
-                echo "# End of Homebrew setup"
-            } >>"$shell_rc"
-        fi
-    done
-
-    # Source the appropriate shell configuration file based on the current shell
-    case "$SHELL" in
-    */zsh) source "$HOME/.zshrc" ;;
-    */bash) source "$HOME/.bashrc" ;;
-    esac
+    local shell_rc="$1"
+    log "Applying changes to shell configuration files if they exist..."
+    if [[ -f "$shell_rc" ]]; then
+        remove_brew_from_shell_rc "$shell_rc"
+        log "Adding Homebrew initialization to $shell_rc..."
+        {
+            echo "# Homebrew environment setup"
+            echo "eval \"\$($HOMEBREW_PREFIX/bin/brew shellenv)\""
+            echo "# End of Homebrew setup"
+        } >>"$shell_rc"
+    fi
+    source "$shell_rc"
 }
 
 find_brew_prefix() {
@@ -149,6 +143,9 @@ if [[ -n "$brew_prefix" ]]; then
         log "Running 'brew doctor' excluding specific checks to determine the installation status..."
         if run_brew_doctor_excluding_checks "$brew_prefix"; then
             success "Homebrew is properly installed and working well (except for specified warnings). Skipping uninstallation."
+            # Set up environment for Homebrew
+            log "Updating shell configuration files to include Homebrew..."
+            add_brew_to_shell_rc "$HOME/.profile"
             exit 0
         else
             log "Issues detected with Homebrew installation. Proceeding with uninstall..."
@@ -180,8 +177,7 @@ if [[ -d "$DEFAULT_HOMEBREW_PREFIX" || -d "$HOMEBREW_PREFIX" || -d "$brew_prefix
 fi
 
 # Remove Homebrew initialization from shell configuration files
-remove_brew_from_shell_rc "$HOME/.zshrc"
-remove_brew_from_shell_rc "$HOME/.bashrc"
+remove_brew_from_shell_rc "$HOME/.profile"
 
 log "Uninstall complete. Proceeding to reinstallation."
 
@@ -218,7 +214,7 @@ fi
 
 # Set up environment for Homebrew
 log "Updating shell configuration files to include Homebrew..."
-add_brew_to_shell_rc
+add_brew_to_shell_rc "$HOME/.profile"
 
 # Verify installation and suppress warning
 log "Running 'brew doctor' excluding specific checks to determine the installation status..."

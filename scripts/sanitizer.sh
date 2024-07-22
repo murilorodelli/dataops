@@ -204,7 +204,6 @@ add_source() {
 
     # Replace $HOME_DIR with '$HOME' in source_file
     local source_file_replaced="${source_file/#$HOME_DIR/\$HOME}"
-    log "source_file_replaced: $source_file_replaced"
 
     # Simplify the check to see if the source command is already present
     log "Checking if $source_file_replaced is already sourced in $file"
