@@ -65,13 +65,15 @@ log "Script is running as $interactive_user without superuser privileges."
 # List of install scripts to call
 install_scripts=(
     # call home sanitizer script first
-    "$script_dir/sanitizer.sh"
+    "$script_dir/init/home_sanitizer.sh"
     # system packages installation
-    "sudo $script_dir/install/system-pkgs.sh"
+    "sudo $script_dir/init/install_system_pkgs.sh"
+    # BIND9 installation
+    "sudo $script_dir/init/install_bind9.sh"
     # docker installation
-    "sudo $script_dir/install/docker.sh"
+    "sudo $script_dir/init/install_docker.sh"
     # homebrew installation - no sudo
-    "$script_dir/install/linuxbrew.sh"
+    "$script_dir/init/install_linuxbrew.sh"
 )
 
 log "Starting installation of individual scripts..."

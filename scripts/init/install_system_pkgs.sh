@@ -66,6 +66,7 @@ packages=(
     procps
     xattr
     zsh
+    direnv
     mysql-client
 )
 

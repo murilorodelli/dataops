@@ -11,7 +11,7 @@ Bem-vindo ao Big Data XYZ! Este repositório contém tudo o que você precisa pa
     - [Pré-requisitos](#pré-requisitos)
     - [Passo a Passo de Instalação](#passo-a-passo-de-instalação)
   - [Configuração do Kubernetes](#configuração-do-kubernetes)
-    - [Minikube](#minikube)
+    - [k3d/k3s](#k3d/k3s)
     - [Kubectl](#kubectl)
   - [Desenvolvimento com VSCode](#desenvolvimento-com-vscode)
     - [Extensões Recomendadas](#extensões-recomendadas)
@@ -37,7 +37,7 @@ Para utilizar este projeto, você precisará dos seguintes componentes:
     - Ubuntu ou similar
 - Git
 - Docker
-- Minikube
+- k3d/k3s
 - Kubectl
 - VSCode
 
@@ -56,8 +56,8 @@ Antes de iniciar a instalação, certifique-se de ter os seguintes pré-requisit
 1. Clone o repositório:
 
    ```bash
-   git clone https://github.com/seu-usuario/projeto-big-data.git
-   cd projeto-big-data
+   git clone https://github.com/murilorodelli/dataops.git
+   cd dataops
    ```
 
 2. Configure o ambiente:
@@ -66,22 +66,20 @@ Antes de iniciar a instalação, certifique-se de ter os seguintes pré-requisit
    ./scripts/bootstrap.sh
    ```
 
-3. Instale as dependências do Python:
+3. Faça novamente o login:
 
-   ```bash
-   pip install -r requirements.txt
-   ```
+   Para realizar logout em WSL, feche a janela do terminal ou digite exit, enquanto em Linux, use o comando logout na linha de comando, ou utilize o menu de logout na interface gráfica.
 
 ## Configuração do Kubernetes
 
-### Minikube
+### k3d/k3s
 
-Minikube é uma ferramenta que facilita a execução de Kubernetes localmente.
+k3d/k3s é uma ferramenta que facilita a execução de Kubernetes localmente.
 
-1. Inicie o Minikube:
+1. Inicie o k3d/k3s:
 
    ```bash
-   minikube start
+   k3d/k3s start
    ```
 
 2. Verifique a instalação:
@@ -173,7 +171,7 @@ projeto-big-data/
 - Iniciar Kubernetes:
 
   ```bash
-  minikube start
+  k3d/k3s start
   ```
 
 - Verificar status do cluster:
