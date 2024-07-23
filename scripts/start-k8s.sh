@@ -21,8 +21,6 @@ ARROW_ICON=""
 
 cleanup() {
     trap - SIGINT SIGTERM ERR EXIT
-    # Perform script cleanup here
-    # Example: remove temporary files, restore system state, etc.
     log "Performing cleanup tasks..."
     # Add your cleanup commands here
     success "Cleanup completed."
@@ -56,8 +54,8 @@ if [[ -n "${SUDO_USER-}" ]]; then
 else
     interactive_user="$USER"
 fi
-log "Script is running as $interactive_user without superuser privileges."
 
+log "Script is running as $interactive_user without superuser privileges."
 
 ###############################################################################
 # Start K3D cluster

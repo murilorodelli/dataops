@@ -93,6 +93,7 @@ add_brew_to_shell_rc() {
             echo "# End of Homebrew setup"
         } >>"$shell_rc"
     fi
+    # shellcheck source=/dev/null
     source "$shell_rc"
 }
 
@@ -114,13 +115,13 @@ run_brew_doctor_excluding_checks() {
 
     local checks_to_run=()
     for check in $all_checks; do
-        if [[ ! " ${excluded_checks[*]} " =~ " ${check} " ]]; then
+        if [[ ! ${excluded_checks[*]} =~ $check ]]; then
             checks_to_run+=("$check")
         fi
     done
 
     # Apply the Linuxbrew environment
-    eval "$($brew_prefix/bin/brew shellenv)"
+    eval $("${brew_prefix}/bin/brew shellenv")
 
     if "$brew_prefix/bin/brew" doctor "${checks_to_run[@]}"; then
         return 0
@@ -146,6 +147,8 @@ if [[ -n "$brew_prefix" ]]; then
             # Set up environment for Homebrew
             log "Updating shell configuration files to include Homebrew..."
             add_brew_to_shell_rc "$HOME/.profile"
+            # add_brew_to_shell_rc "$HOME/.bashrc"
+            # add_brew_to_shell_rc "$HOME/.zshrc"
             exit 0
         else
             log "Issues detected with Homebrew installation. Proceeding with uninstall..."
@@ -178,6 +181,8 @@ fi
 
 # Remove Homebrew initialization from shell configuration files
 remove_brew_from_shell_rc "$HOME/.profile"
+remove_brew_from_shell_rc "$HOME/.bashrc"
+remove_brew_from_shell_rc "$HOME/.zshrc"
 
 log "Uninstall complete. Proceeding to reinstallation."
 
@@ -215,6 +220,8 @@ fi
 # Set up environment for Homebrew
 log "Updating shell configuration files to include Homebrew..."
 add_brew_to_shell_rc "$HOME/.profile"
+# add_brew_to_shell_rc "$HOME/.bashrc"
+# add_brew_to_shell_rc "$HOME/.zshrc"
 
 # Verify installation and suppress warning
 log "Running 'brew doctor' excluding specific checks to determine the installation status..."

@@ -71,6 +71,13 @@ chown_home_files() {
     success "Ownership of all files in the home directory changed."
 }
 
+# Function to disable UFW
+disable_ufw() {
+    log "Disabling UFW in WSL because it only makes things more difficult..."
+    sudo ufw disable || error "Failed to disable UFW"
+    success "UFW disabled."
+}
+
 # Function to fix file and folder permissions
 fix_permissions() {
     log "Fixing file and folder permissions..."
@@ -277,6 +284,7 @@ update_shell_rc() {
 
 log "Starting comprehensive cleanup process..."
 
+disable_ufw
 chown_home_files
 fix_permissions
 
