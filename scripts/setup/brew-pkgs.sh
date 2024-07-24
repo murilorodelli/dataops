@@ -64,12 +64,19 @@ log "Script is running as $interactive_user without superuser privileges."
 
 # Define the packages to be installed
 packages=(
-    gcc 
-    make 
-    git 
-    ripgrep 
-    fd 
-    unzip 
+    gcc
+    make
+    git
+    ripgrep
+    fd
+    eza
+    bat
+    duf
+    dust
+    tldr
+    procs
+    zoxide
+    unzip
     neovim
     shfmt
     shellcheck
