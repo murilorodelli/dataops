@@ -23,9 +23,9 @@ cleanup() {
     trap - SIGINT SIGTERM ERR EXIT
     # Perform script cleanup here
     # Example: remove temporary files, restore system state, etc.
-    log "Performing cleanup tasks..."
+    # log "Performing cleanup tasks..."
     # Add your cleanup commands here
-    success "Cleanup completed."
+    # success "Cleanup completed."
 }
 
 log() {

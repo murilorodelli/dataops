@@ -23,9 +23,9 @@ cleanup() {
     trap - SIGINT SIGTERM ERR EXIT
     # Perform script cleanup here
     # Example: remove temporary files, restore system state, etc.
-    log "Performing cleanup tasks..."
+    # log "Performing cleanup tasks..."
     # Add your cleanup commands here
-    success "Cleanup completed."
+    # success "Cleanup completed."
 }
 
 log() {
@@ -58,6 +58,63 @@ else
 fi
 
 log "Script is running as $interactive_user without superuser privileges."
+
+###############################################################################
+# Install packages
+###############################################################################
+
+# Define the packages to be installed
+packages=(
+    gcc
+    openssl
+    unzip
+    curl
+    wget
+    git
+    cmake
+    make
+    m4
+    bison
+    krb5
+    mandoc
+    sqlite
+    util-linux
+    openldap
+    ripgrep
+    fd
+    eza
+    bat
+    duf
+    dust
+    tldr
+    procs
+    zoxide
+    neovim
+    shfmt
+    shellcheck
+    direnv
+    k3d
+    kubectl
+    helm
+    k9s
+)
+
+log "Updating linuxbrew..."
+brew update
+
+log "Upgrading linuxbrew..."
+brew upgrade
+
+log "Starting package installation..."
+
+# Install each package one by one
+for package in "${packages[@]}"; do
+    if brew install "$package"; then
+        success "Successfully installed $package"
+    else
+        error "Failed to install $package"
+    fi
+done
 
 # Shell completion commands
 declare -A bash_completions=(

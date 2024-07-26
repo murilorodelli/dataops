@@ -58,17 +58,18 @@ log "Script is running with superuser privileges."
 
 # Define the packages to be installed
 packages=(
+    curl
+    wget
+    git
     build-essential
     bash
     bash-completion
-    curl
-    wget
+    python3-venv
+    zsh
     file
     xattr
-    git
     net-tools
     procps
-    zsh
     mysql-client
 )
 
