@@ -69,10 +69,12 @@ success "BIND9 installed."
 
 log "Configuring BIND9..."
 BIND_OPTIONS_CONF="/etc/bind/named.conf.options"
+BIND_CACHE_DIR="/var/cache/bind"
+BIND_LOG_DIR="/var/log/bind"
 
 sudo tee "$BIND_OPTIONS_CONF" >/dev/null <<EOF
 options {
-    directory "/var/cache/bind";
+    directory "$BIND_CACHE_DIR";
 
     recursion yes;
     allow-recursion { any; };
@@ -88,6 +90,20 @@ options {
     auth-nxdomain no;
     listen-on-v6 { any; };
 };
+
+logging {
+    channel default_log {
+        file "$BIND_LOG_DIR/query.log" versions 3 size 50m;
+        severity info;
+        print-time yes;
+        print-category yes;
+        # Removed print-category-version
+    };
+
+    category queries { default_log; };
+    category default { default_log; };
+};
+
 EOF
 success "BIND9 configuration updated."
 
@@ -167,10 +183,18 @@ log "Setting permissions for BIND files..."
 
 # Set ownership for all files in /etc/bind to the bind user and group
 sudo chown -R bind:bind /etc/bind
+sudo chown -R bind:bind "$BIND_CACHE_DIR"
+sudo chown -R bind:bind "$BIND_LOG_DIR"
 
 # Set specific permissions for directories and files
 sudo find /etc/bind -type d -exec chmod 775 {} \; # Directories writable by the group
 sudo find /etc/bind -type f -exec chmod 644 {} \; # Files readable by all, writable by owner
+
+sudo find "$BIND_CACHE_DIR" -type d -exec chmod 775 {} \; # Directories writable by the group
+sudo find "$BIND_CACHE_DIR" -type f -exec chmod 644 {} \; # Files readable by all, writable by owner
+
+sudo find "$BIND_LOG_DIR" -type d -exec chmod 775 {} \; # Directories writable by the group
+sudo find "$BIND_LOG_DIR" -type f -exec chmod 644 {} \; # Files readable by all, writable by owner
 
 # Ensure critical files have the correct permissions
 sudo chown bind:bind /etc/bind/named.conf /etc/bind/named.conf.local /etc/bind/named.conf.options /etc/bind/k8s.local.key
