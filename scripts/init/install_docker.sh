@@ -5,7 +5,6 @@ set -Eeuo pipefail
 trap cleanup SIGINT SIGTERM ERR EXIT
 
 # Define colors
-
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[0;33m'
@@ -24,9 +23,9 @@ cleanup() {
     trap - SIGINT SIGTERM ERR EXIT
     # Perform script cleanup here
     # Example: remove temporary files, restore system state, etc.
-    log "Performing cleanup tasks..."
+    # log "Performing cleanup tasks..."
     # Add your cleanup commands here
-    success "Cleanup completed."
+    # success "Cleanup completed."
 }
 
 log() {

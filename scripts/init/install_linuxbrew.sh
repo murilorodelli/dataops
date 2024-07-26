@@ -23,10 +23,11 @@ cleanup() {
     trap - SIGINT SIGTERM ERR EXIT
     # Perform script cleanup here
     # Example: remove temporary files, restore system state, etc.
-    log "Performing cleanup tasks..."
-    # Add your cleanup commands here
-    rm -f brew_removal.sh brew_install.sh
-    success "Cleanup completed."
+    if [[ -f brew_removal.sh ]] || [[ -f brew_install.sh ]]; then
+        log "Performing cleanup tasks..."
+        rm -f brew_removal.sh brew_install.sh
+        success "Cleanup completed."
+    fi
 }
 
 log() {

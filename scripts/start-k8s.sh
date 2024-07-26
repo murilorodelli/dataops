@@ -20,9 +20,10 @@ ERROR_ICON=""
 ARROW_ICON=""
 
 cleanup() {
-    trap - SIGINT SIGTERM ERR EXIT
-    log "Performing cleanup tasks..."
+    trap - SIGINT SIGTERM ERR
+
     # Cleanup commands
+    log "Performing cleanup tasks..."
     if k3d cluster list | grep -q 'local'; then
         log "Removing existing k3d cluster 'local'..."
         k3d cluster delete local || error "Failed to delete existing k3d cluster."

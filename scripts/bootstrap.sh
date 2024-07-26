@@ -23,9 +23,9 @@ cleanup() {
     trap - SIGINT SIGTERM ERR EXIT
     # Perform script cleanup here
     # Example: remove temporary files, restore system state, etc.
-    log "Performing cleanup tasks..."
+    # log "Performing cleanup tasks..."
     # Add your cleanup commands here
-    success "Cleanup completed."
+    # success "Cleanup completed."
 }
 
 log() {
@@ -64,10 +64,10 @@ log "Script is running as $interactive_user without superuser privileges."
 
 # List of install scripts to call
 install_scripts=(
-    # call home sanitizer script first
-    "$script_dir/init/home_sanitizer.sh"
     # system packages installation
     "sudo $script_dir/init/install_system_pkgs.sh"
+    # call home sanitizer script first
+    "$script_dir/init/home_sanitizer.sh"
     # BIND9 installation
     "sudo $script_dir/init/install_bind9.sh"
     # docker installation

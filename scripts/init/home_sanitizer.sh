@@ -21,9 +21,11 @@ ARROW_ICON=""
 
 cleanup() {
     trap - SIGINT SIGTERM ERR EXIT
-    log "Performing cleanup tasks..."
+    # Perform script cleanup here
+    # Example: remove temporary files, restore system state, etc.
+    # log "Performing cleanup tasks..."
     # Add your cleanup commands here
-    success "Cleanup completed."
+    # success "Cleanup completed."
 }
 
 log() {
@@ -280,13 +282,15 @@ update_shell_rc() {
             add_guard "${files_to_update[$i]}" "${guard_vars[$i]}" || error "Failed to add guard to ${files_to_update[$i]}"
         fi
     done
+
+    echo "source /etc/bash_completion" >> "$HOME_DIR/.bashrc"
 }
 
 log "Starting comprehensive cleanup process..."
 
 #disable_ufw
-#chown_home_files
-#fix_permissions
+chown_home_files
+fix_permissions
 
 clean_temp_files
 clean_log_files
@@ -297,6 +301,6 @@ clean_docker_k8s_files
 clean_linuxbrew_files
 clean_cloud_dev_files
 
-#update_shell_rc
+update_shell_rc
 
 success "Comprehensive home directory cleanup and fixes completed."

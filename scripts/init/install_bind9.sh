@@ -21,9 +21,12 @@ ARROW_ICON=""
 
 cleanup() {
     trap - SIGINT SIGTERM ERR EXIT
-    log "Performing cleanup tasks..."
-    sudo rm -f add_record.txt remove_record.txt
-    success "Cleanup completed."
+
+    if [[ -f add_record.txt ]] || [[ -f remove_record.txt ]]; then
+        log "Performing cleanup tasks..."
+        sudo rm -f add_record.txt remove_record.txt
+        success "Cleanup completed."
+    fi
 }
 
 log() {
