@@ -284,9 +284,9 @@ update_shell_rc() {
 
 log "Starting comprehensive cleanup process..."
 
-disable_ufw
-chown_home_files
-fix_permissions
+#disable_ufw
+#chown_home_files
+#fix_permissions
 
 clean_temp_files
 clean_log_files

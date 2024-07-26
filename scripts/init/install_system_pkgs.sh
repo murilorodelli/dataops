@@ -59,18 +59,14 @@ log "Script is running with superuser privileges."
 packages=(
     build-essential
     bash
-    bash-builtins
     bash-completion
-    gnutls-bin
     curl
     wget
     file
     git
     net-tools
     procps
-    xattr
     zsh
-    direnv
     mysql-client
 )
 

@@ -54,18 +54,6 @@ log "Script is running with superuser privileges."
 # Replace systemd-resolved with BIND9 as local DNS server
 ###############################################################################
 
-#------------------------------------------------------------------------------
-# Disable systemd-resolved
-#------------------------------------------------------------------------------
-
-log "Disabling and stopping systemd-resolved service..."
-sudo systemctl stop systemd-resolved
-sudo systemctl disable systemd-resolved
-success "systemd-resolved stopped and disabled."
-
-log "Removing /etc/resolv.conf symlink..."
-sudo rm -f /etc/resolv.conf
-success "/etc/resolv.conf symlink removed."
 
 #------------------------------------------------------------------------------
 # Install BIND9
@@ -73,7 +61,7 @@ success "/etc/resolv.conf symlink removed."
 
 log "Installing BIND9..."
 sudo apt update
-sudo apt install -y bind9 bind9utils bind9-doc
+sudo apt install -y bind9 bind9-utils bind9-doc bind9-host bind9-dnsutils dnsutils mmdb-bin
 success "BIND9 installed."
 
 log "Configuring BIND9..."
@@ -190,19 +178,6 @@ sudo chmod 664 /etc/bind/db.k8s.local
 
 success "Permissions for BIND files set."
 
-log "Creating /etc/resolv.conf with localhost as nameserver..."
-sudo tee /etc/resolv.conf >/dev/null <<EOF
-nameserver 127.0.0.1
-EOF
-success "/etc/resolv.conf created."
-
-log "Restarting BIND9 service..."
-sudo systemctl restart named
-success "BIND9 service restarted."
-
-log "Enabling BIND9 service to start on boot..."
-sudo systemctl enable named
-success "BIND9 service enabled to start on boot."
 
 #------------------------------------------------------------------------------
 # Update wsl.conf
@@ -220,6 +195,37 @@ generateResolvConf = false
 generateHosts = true
 EOF
 success "wsl.conf updated."
+
+#------------------------------------------------------------------------------
+# Disable systemd-resolved and enable bind9
+#------------------------------------------------------------------------------
+
+log "Disabling and stopping systemd-resolved service..."
+sudo systemctl stop systemd-resolved
+sudo systemctl disable systemd-resolved
+success "systemd-resolved stopped and disabled."
+
+log "Removing /etc/resolv.conf symlink..."
+sudo rm -f /etc/resolv.conf
+success "/etc/resolv.conf symlink removed."
+
+#------------------------------------------------------------------------------
+# Enable and start bind9 
+#------------------------------------------------------------------------------
+
+log "Creating /etc/resolv.conf with localhost as nameserver..."
+sudo tee /etc/resolv.conf >/dev/null <<EOF
+nameserver 127.0.0.1
+EOF
+success "/etc/resolv.conf created."
+
+log "Restarting BIND9 service..."
+sudo systemctl restart named
+success "BIND9 service restarted."
+
+log "Enabling BIND9 service to start on boot..."
+sudo systemctl enable named
+success "BIND9 service enabled to start on boot."
 
 #------------------------------------------------------------------------------
 # Verify BIND9 configuration
