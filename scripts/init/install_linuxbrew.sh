@@ -25,6 +25,7 @@ cleanup() {
     # Example: remove temporary files, restore system state, etc.
     log "Performing cleanup tasks..."
     # Add your cleanup commands here
+    rm -f brew_removal.sh brew_install.sh
     success "Cleanup completed."
 }
 
@@ -92,9 +93,10 @@ add_brew_to_shell_rc() {
             echo "eval \"\$($HOMEBREW_PREFIX/bin/brew shellenv)\""
             echo "# End of Homebrew setup"
         } >>"$shell_rc"
+    	
+	# shellcheck source=/dev/null
+	source "$shell_rc"
     fi
-    # shellcheck source=/dev/null
-    source "$shell_rc"
 }
 
 find_brew_prefix() {

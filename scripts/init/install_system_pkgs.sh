@@ -63,6 +63,7 @@ packages=(
     curl
     wget
     file
+    xattr
     git
     net-tools
     procps

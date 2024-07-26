@@ -297,6 +297,6 @@ clean_docker_k8s_files
 clean_linuxbrew_files
 clean_cloud_dev_files
 
-update_shell_rc
+#update_shell_rc
 
 success "Comprehensive home directory cleanup and fixes completed."
