@@ -2,7 +2,7 @@
 
 # Best recommended set options
 set -Eeuo pipefail
-trap cleanup SIGINT SIGTERM ERR EXIT
+trap cleanup SIGINT SIGTERM ERR
 
 # Define colors
 RED='\033[0;31m'
@@ -22,7 +22,12 @@ ARROW_ICON=""
 cleanup() {
     trap - SIGINT SIGTERM ERR EXIT
     log "Performing cleanup tasks..."
-    # Add your cleanup commands here
+    # Cleanup commands
+    if k3d cluster list | grep -q 'local'; then
+        log "Removing existing k3d cluster 'local'..."
+        k3d cluster delete local || error "Failed to delete existing k3d cluster."
+        success "Existing k3d cluster 'local' removed."
+    fi
     success "Cleanup completed."
 }
 
@@ -57,15 +62,28 @@ fi
 
 log "Script is running as $interactive_user without superuser privileges."
 
+# Get the home directory of the interactive user
+home_dir=$(getent passwd "$interactive_user" | cut -d: -f6)
+if [[ -z "$home_dir" ]]; then
+    error "Could not determine the home directory of the interactive user."
+fi
+
 ###############################################################################
 # Start K3D cluster
 ###############################################################################
+conf_dir="$script_dir/../conf"
+if [[ ! -d "$conf_dir" ]]; then
+    error "Could not determine the config directory of k3d."
+fi
 
-k3d cluster create mycluster \
-    --servers 1 \
-    --agents 2 \
-    --api-port 6550 \
-    --port '80:80@loadbalancer' \
-    --port '443:443@loadbalancer' \
-    --port '5432:5432@loadbalancer' \
-    --port '3306:3306@loadbalancer'
+# Ensure the data and registry directories exist
+mkdir -p "${home_dir}/.k3d/{data,registry}"
+
+log "Checking for existing k3d cluster..."
+if k3d cluster list | grep -q 'local'; then
+    log "Existing k3d cluster 'local' found. Exiting"
+else
+    log "Creating k3d cluster 'local'..."
+    k3d cluster create local --config "$conf_dir/k3d/config.yaml" || error "Failed to create k3d cluster 'local'."
+    success "Cluster 'local' created successfully."
+fi

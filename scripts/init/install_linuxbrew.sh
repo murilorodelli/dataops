@@ -147,8 +147,8 @@ if [[ -n "$brew_prefix" ]]; then
             # Set up environment for Homebrew
             log "Updating shell configuration files to include Homebrew..."
             add_brew_to_shell_rc "$HOME/.profile"
-            # add_brew_to_shell_rc "$HOME/.bashrc"
-            # add_brew_to_shell_rc "$HOME/.zshrc"
+            add_brew_to_shell_rc "$HOME/.bashrc"
+            add_brew_to_shell_rc "$HOME/.zshrc"
             exit 0
         else
             log "Issues detected with Homebrew installation. Proceeding with uninstall..."
@@ -220,8 +220,8 @@ fi
 # Set up environment for Homebrew
 log "Updating shell configuration files to include Homebrew..."
 add_brew_to_shell_rc "$HOME/.profile"
-# add_brew_to_shell_rc "$HOME/.bashrc"
-# add_brew_to_shell_rc "$HOME/.zshrc"
+add_brew_to_shell_rc "$HOME/.bashrc"
+add_brew_to_shell_rc "$HOME/.zshrc"
 
 # Verify installation and suppress warning
 log "Running 'brew doctor' excluding specific checks to determine the installation status..."

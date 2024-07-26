@@ -56,50 +56,49 @@ if [[ -n "${SUDO_USER-}" ]]; then
 else
     interactive_user="$USER"
 fi
+
 log "Script is running as $interactive_user without superuser privileges."
 
-###############################################################################
-# Linuxbrew Packages
-###############################################################################
-
-# Define the packages to be installed
-packages=(
-    gcc
-    make
-    git
-    ripgrep
-    fd
-    eza
-    bat
-    duf
-    dust
-    tldr
-    procs
-    zoxide
-    unzip
-    neovim
-    shfmt
-    shellcheck
-    direnv
-    k3d
-    kubectl
-    helm
-    k9s
+# Shell completion commands
+declare -A bash_completions=(
+    ["kubectl"]="source <(kubectl completion bash)"
+    ["helm"]="source <(helm completion bash)"
+    ["ripgrep"]="source <(rg --generate=complete-bash)"
 )
 
-log "Updating linuxbrew..."
-brew update
+declare -A zsh_completions=(
+    ["kubectl"]="source <(kubectl completion zsh)"
+    ["helm"]="source <(helm completion zsh)"
+    ["ripgrep"]="source <(rg --generate=complete-zsh)"
+)
 
-log "Upgrading linuxbrew..."
-brew upgrade
+# Configuration files for different shells
+declare -A config_files=(
+    ["bash"]="$HOME/.bashrc"
+    ["zsh"]="$HOME/.zshrc"
+)
 
-log "Starting package installation..."
+log "Adding shell completion commands..."
+for shell in "${!config_files[@]}"; do
+    config_file="${config_files[$shell]}"
+    if [[ -f "$config_file" ]]; then
+        if [[ "$shell" == "bash" ]]; then
+            # Ensure bash_completion is sourced before adding other completions
+            if ! grep -Fq 'source /etc/bash_completion' "$config_file"; then
+                echo 'source /etc/bash_completion' >>"$config_file"
+                log "Added source /etc/bash_completion to $config_file"
+            fi
+        fi
+        declare -n completions="${shell}_completions"
+        for cmd in "${completions[@]}"; do
+            if ! grep -Fq "$cmd" "$config_file"; then
+                echo "$cmd" >>"$config_file"
+                log "Added $cmd to $config_file"
+            fi
+        done
+    else
+        log "Configuration file $config_file does not exist."
+    fi
+done
 
-# Install all packages at once
-if brew install "${packages[@]}"; then
-    success "Successfully installed all packages: ${packages[*]}"
-else
-    error "Failed to install one or more packages: ${packages[*]}"
-fi
-
-success "All packages have been installed successfully."
+success "All packages and completions have been set up successfully."

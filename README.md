@@ -11,7 +11,7 @@ Bem-vindo ao Big Data XYZ! Este repositório contém tudo o que você precisa pa
     - [Pré-requisitos](#pré-requisitos)
     - [Passo a Passo de Instalação](#passo-a-passo-de-instalação)
   - [Configuração do Kubernetes](#configuração-do-kubernetes)
-    - [k3d/k3s](#k3d/k3s)
+    - [k3d/k3s](#k3dk3s)
     - [Kubectl](#kubectl)
   - [Desenvolvimento com VSCode](#desenvolvimento-com-vscode)
     - [Extensões Recomendadas](#extensões-recomendadas)
@@ -55,20 +55,35 @@ Antes de iniciar a instalação, certifique-se de ter os seguintes pré-requisit
 
 1. Clone o repositório:
 
-   ```bash
-   git clone https://github.com/murilorodelli/dataops.git
-   cd dataops
-   ```
+    ```bash
+    git clone https://github.com/murilorodelli/dataops.git
+    cd dataops
+    ```
 
 2. Configure o ambiente:
 
-   ```bash
-   ./scripts/bootstrap.sh
-   ```
+    ```bash
+    ./scripts/bootstrap.sh
+    ```
 
-3. Faça novamente o login:
+3. Encerre a sessão:
 
-   Para realizar logout em WSL, feche a janela do terminal ou digite exit, enquanto em Linux, use o comando logout na linha de comando, ou utilize o menu de logout na interface gráfica.
+    Saia do seu terminal e sessão atuais e faça login novamente:
+
+    - Para WSL (Subsistema Windows para Linux):
+      - Feche a janela do terminal atual.
+      - Abra uma nova janela do terminal.
+
+    - Para Ubuntu nativo:
+      - Saia da sua sessão atual:
+        - Clique no menu do sistema (canto superior direito) e selecione 'Sair'.
+      - Faça login novamente com suas credenciais de usuário.
+
+4. Instale aplicativos essenciais:
+
+    ```bash
+    ./scripts/setup/brew-pkgs.sh
+    ```
 
 ## Configuração do Kubernetes
 

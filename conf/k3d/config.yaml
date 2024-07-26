@@ -1,0 +1,59 @@
+apiVersion: k3d.io/v1alpha5
+kind: Simple
+servers: 1
+agents: 3
+kubeAPI:
+  hostIP: "0.0.0.0"
+  hostPort: "6445"
+image: rancher/k3s:latest
+network: k3d-net
+volumes:
+- volume: ${HOME}/.k3d/data:/data/
+  nodeFilters:
+  - all
+ports:
+- port: 80:80
+  nodeFilters:
+  - loadbalancer
+- port: 443:443
+  nodeFilters:
+  - loadbalancer
+- port: 5432:5432
+  nodeFilters:
+  - loadbalancer
+- port: 3306:3306
+  nodeFilters:
+  - loadbalancer
+env:
+- envVar: DEPLOY_ENV=${DEPLOY_ENV}
+  nodeFilters:
+  - all
+registries:
+  create:
+    name: registry.localhost
+    host: "0.0.0.0"
+    hostPort: "5000"
+    proxy:
+      remoteURL: https://registry-1.docker.io
+      username: ""
+      password: ""
+    volumes:
+    - ${HOME}/.k3d/registry:/var/lib/registry
+options:
+  k3d:
+    wait: true
+    timeout: "6m0s"
+    disableLoadbalancer: false
+    disableImageVolume: false
+    disableRollback: false
+    loadbalancer:
+      configOverrides:
+      - settings.workerConnections=2048
+  k3s:
+    extraArgs:
+    - arg: "--tls-san=127.0.0.1"
+      nodeFilters:
+      - server:*
+  kubeconfig:
+    updateDefaultKubeconfig: true
+    switchCurrentContext: true

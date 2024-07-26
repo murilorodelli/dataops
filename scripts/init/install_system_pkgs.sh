@@ -58,6 +58,10 @@ log "Script is running with superuser privileges."
 # Define the packages to be installed
 packages=(
     build-essential
+    bash
+    bash-builtins
+    bash-completion
+    gnutls-bin
     curl
     wget
     file
