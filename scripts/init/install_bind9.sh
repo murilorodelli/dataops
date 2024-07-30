@@ -54,24 +54,28 @@ fi
 log "Script is running with superuser privileges."
 
 ###############################################################################
-# Replace systemd-resolved with BIND9 as local DNS server
+# This script will install BIND9 and configure it as the local DNS server
 ###############################################################################
 
+BIND_CONF_DIR="/etc/bind"
+
+BIND_CACHE_DIR="/var/cache/bind"
+BIND_LOG_DIR="/var/log/bind"
+
+sudo mkdir -p "$BIND_CACHE_DIR"
+sudo mkdir -p "$BIND_LOG_DIR"
 
 #------------------------------------------------------------------------------
 # Install BIND9
 #------------------------------------------------------------------------------
 
-log "Installing BIND9..."
+log "Installing BIND9 packages..."
 sudo apt update
 sudo apt install -y bind9 bind9-utils bind9-doc bind9-host bind9-dnsutils dnsutils mmdb-bin
-success "BIND9 installed."
+success "BIND9 packages installed."
 
 log "Configuring BIND9..."
-BIND_OPTIONS_CONF="/etc/bind/named.conf.options"
-BIND_CACHE_DIR="/var/cache/bind"
-BIND_LOG_DIR="/var/log/bind"
-
+BIND_OPTIONS_CONF="$BIND_CONF_DIR/named.conf.options"
 sudo tee "$BIND_OPTIONS_CONF" >/dev/null <<EOF
 options {
     directory "$BIND_CACHE_DIR";
@@ -111,7 +115,7 @@ success "BIND9 configuration updated."
 PRIMARY_IFACE_IP=$(ip -4 addr show "$(ip route | grep default | awk '{print $5}')" | grep -oP '(?<=inet\s)\d+(\.\d+){3}')
 log "Primary network interface IP: $PRIMARY_IFACE_IP"
 
-ZONE_FILE="/etc/bind/db.k8s.local"
+ZONE_FILE="$BIND_CONF_DIR/db.k8s.local"
 sudo tee "$ZONE_FILE" >/dev/null <<EOF
 ;
 ; BIND reverse data file for k8s.local zone
@@ -141,15 +145,13 @@ ns              IN      A       $PRIMARY_IFACE_IP
 EOF
 success "Zone file for k8s.local created with ns record IP: $PRIMARY_IFACE_IP"
 
-NAMED_CONF_LOCAL="/etc/bind/named.conf.local"
-
 # Define variables for file paths and TSIG details
 TSIG_KEY_NAME="externaldns-key"
 TSIG_ALGORITHM="hmac-sha256"
 TSIG_SECRET=$(tsig-keygen -a "$TSIG_ALGORITHM" "$TSIG_KEY_NAME" | awk '/secret/{print $2}' | tr -d '";')
-TSIG_KEY_FILE="/etc/bind/k8s.local.key"
-ZONE_FILE="/etc/bind/db.k8s.local"
-NAMED_CONF_LOCAL="/etc/bind/named.conf.local"
+
+TSIG_KEY_FILE="$BIND_CONF_DIR/k8s.local.key"
+ZONE_FILE="$BIND_CONF_DIR/db.k8s.local"
 
 # Generate the TSIG key file
 sudo tee "$TSIG_KEY_FILE" >/dev/null <<EOF
@@ -159,8 +161,8 @@ key "$TSIG_KEY_NAME" {
 };
 EOF
 
-# Update the named.conf.local file
-log "Update the $NAMED_CONF_LOCAL file"
+log "Update the named.conf.local file"
+NAMED_CONF_LOCAL="$BIND_CONF_DIR/named.conf.local"
 # Remove existing k8s.local zone and TSIG key block if it exists
 sudo sed -i '/include "\/etc\/bind\/k8s.local.key"/,/^};/d' "$NAMED_CONF_LOCAL"
 
@@ -182,29 +184,27 @@ success "TSIG key and zone configuration added to $NAMED_CONF_LOCAL."
 log "Setting permissions for BIND files..."
 
 # Set ownership for all files in /etc/bind to the bind user and group
-sudo chown -R bind:bind /etc/bind
+sudo chown -R bind:bind "$BIND_CONF_DIR"
 sudo chown -R bind:bind "$BIND_CACHE_DIR"
 sudo chown -R bind:bind "$BIND_LOG_DIR"
 
 # Set specific permissions for directories and files
-sudo find /etc/bind -type d -exec chmod 775 {} \; # Directories writable by the group
-sudo find /etc/bind -type f -exec chmod 644 {} \; # Files readable by all, writable by owner
+sudo find "$BIND_CONF_DIR" -type d -exec chmod 775 {} \;       # Directories writable by the group
+sudo find "$BIND_CONF_DIR" -type f -exec chmod 644 {} \;       # Files readable by all, writable by owner
+sudo find "$BIND_CONF_DIR" -type f -exec chown bind:bind {} \; # Files owned by bind user
 
-sudo find "$BIND_CACHE_DIR" -type d -exec chmod 775 {} \; # Directories writable by the group
-sudo find "$BIND_CACHE_DIR" -type f -exec chmod 644 {} \; # Files readable by all, writable by owner
+sudo find "$BIND_CACHE_DIR" -type d -exec chmod 775 {} \;       # Directories writable by the group
+sudo find "$BIND_CACHE_DIR" -type f -exec chmod 644 {} \;       # Files readable by all, writable by owner
+sudo find "$BIND_CACHE_DIR" -type f -exec chown bind:bind {} \; # Files owned by bind user
 
-sudo find "$BIND_LOG_DIR" -type d -exec chmod 775 {} \; # Directories writable by the group
-sudo find "$BIND_LOG_DIR" -type f -exec chmod 644 {} \; # Files readable by all, writable by owner
-
-# Ensure critical files have the correct permissions
-sudo chown bind:bind /etc/bind/named.conf /etc/bind/named.conf.local /etc/bind/named.conf.options /etc/bind/k8s.local.key
-sudo chmod 644 /etc/bind/named.conf /etc/bind/named.conf.local /etc/bind/named.conf.options /etc/bind/k8s.local.key
+sudo find "$BIND_LOG_DIR" -type d -exec chmod 775 {} \;       # Directories writable by the group
+sudo find "$BIND_LOG_DIR" -type f -exec chmod 644 {} \;       # Files readable by all, writable by owner
+sudo find "$BIND_LOG_DIR" -type f -exec chown bind:bind {} \; # Files owned by bind user
 
 # Specific permissions for the zone file to allow updates
-sudo chmod 664 /etc/bind/db.k8s.local
+sudo chmod 664 $ZONE_FILE
 
 success "Permissions for BIND files set."
-
 
 #------------------------------------------------------------------------------
 # Update wsl.conf
@@ -237,7 +237,7 @@ sudo rm -f /etc/resolv.conf
 success "/etc/resolv.conf symlink removed."
 
 #------------------------------------------------------------------------------
-# Enable and start bind9 
+# Enable and start bind9
 #------------------------------------------------------------------------------
 
 log "Creating /etc/resolv.conf with localhost as nameserver..."

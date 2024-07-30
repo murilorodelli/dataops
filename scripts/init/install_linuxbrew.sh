@@ -94,9 +94,9 @@ add_brew_to_shell_rc() {
             echo "eval \"\$($HOMEBREW_PREFIX/bin/brew shellenv)\""
             echo "# End of Homebrew setup"
         } >>"$shell_rc"
-    	
-	# shellcheck source=/dev/null
-	source "$shell_rc"
+
+        # shellcheck source=/dev/null
+        source "$shell_rc"
     fi
 }
 
@@ -115,6 +115,8 @@ run_brew_doctor_excluding_checks() {
     local excluded_checks=("check_homebrew_prefix" "check_cask_quarantine_support" "check_cask_software_versions")
     local all_checks
     all_checks=$("$brew_prefix/bin/brew" doctor --list-checks)
+
+    PATH="$brew_prefix/bin:$PATH"
 
     local checks_to_run=()
     for check in $all_checks; do

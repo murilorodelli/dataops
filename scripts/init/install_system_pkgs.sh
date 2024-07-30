@@ -56,10 +56,25 @@ log "Script is running with superuser privileges."
 # System Packages
 ###############################################################################
 
+# Update package list
+
+log "Updating package list..."
+sudo apt-get update --assume-yes --quiet || error "Failed to update package list"
+log "Package list has been updated successfully."
+
+log "Upgrading system packages..."
+sudo apt-get full-upgrade --assume-yes --quiet || error "Failed to upgrade system packages"
+log "System packages have been upgraded successfully."
+
 # Define the packages to be installed
 packages=(
     curl
     wget
+    direnv
+    shellcheck
+    shfmt
+    pigz
+    nftables
     git
     build-essential
     bash
