@@ -2,7 +2,7 @@
 
 # Best recommended set options
 set -Eeuo pipefail
-trap cleanup SIGINT SIGTERM ERR EXIT
+trap cleanup SIGINT SIGTERM ERR
 
 # Define colors
 RED='\033[0;31m'
@@ -19,8 +19,9 @@ SUCCESS_ICON=""
 ERROR_ICON=""
 ARROW_ICON=""
 
+
 cleanup() {
-    trap - SIGINT SIGTERM ERR EXIT
+    trap - SIGINT SIGTERM ERR
     # Perform script cleanup here
     # Example: remove temporary files, restore system state, etc.
     # log "Performing cleanup tasks..."
@@ -103,6 +104,9 @@ if ! getent group docker >/dev/null; then
 fi
 sudo usermod -aG docker "$interactive_user" || error "Failed to add user to Docker group"
 
+# Inform the user about the need to log out and back in
+log "Please log out and back in or restart your session to apply Docker group membership changes."
+
 # Verify installation
 log "Verifying Docker installation..."
 if ! sudo docker run hello-world; then
@@ -110,3 +114,9 @@ if ! sudo docker run hello-world; then
 fi
 
 success "Docker installation completed successfully."
+
+# Prune unused Docker resources
+log "Pruning unused Docker resources..."
+docker system prune -af --volumes || error "Failed to prune Docker resources"
+
+success "Pruning of Docker resources completed."
