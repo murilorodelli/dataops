@@ -80,7 +80,6 @@ packages=(
     bash
     bash-completion
     python3-venv
-    zsh
     file
     xattr
     net-tools

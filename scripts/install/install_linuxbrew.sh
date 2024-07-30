@@ -60,6 +60,9 @@ else
 fi
 log "Script is running as $interactive_user without superuser privileges."
 
+HOME_DIR=$(eval echo "~$interactive_user")
+log "Applying changes to home directory of user $interactive_user: $HOME_DIR"
+
 ###############################################################################
 # Uninstall existing Homebrew (if any) and install it to ~/.linuxbrew
 ###############################################################################
@@ -69,9 +72,9 @@ command -v curl >/dev/null 2>&1 || error "curl is required but not installed."
 command -v sed >/dev/null 2>&1 || error "sed is required but not installed."
 
 # Define the Linuxbrew installation directory
-HOMEBREW_PREFIX="${HOMEBREW_PREFIX:-$HOME/.linuxbrew}"
+HOMEBREW_PREFIX="${HOMEBREW_PREFIX:-$HOME_DIR/.linuxbrew}"
 DEFAULT_HOMEBREW_PREFIX="/home/linuxbrew/.linuxbrew"
-OTHER_COMMON_PREFIXES=("$HOME/.linuxbrew" "/usr/local/Homebrew" "/opt/homebrew")
+OTHER_COMMON_PREFIXES=("$HOME_DIR/.linuxbrew" "/usr/local/Homebrew" "/opt/homebrew")
 
 export NONINTERACTIVE=1
 
@@ -86,6 +89,7 @@ remove_brew_from_shell_rc() {
 add_brew_to_shell_rc() {
     local shell_rc="$1"
     log "Applying changes to shell configuration files if they exist..."
+    touch "$shell_rc"
     if [[ -f "$shell_rc" ]]; then
         remove_brew_from_shell_rc "$shell_rc"
         log "Adding Homebrew initialization to $shell_rc..."
@@ -151,9 +155,8 @@ if [[ -n "$brew_prefix" ]]; then
             success "Homebrew is properly installed and working well (except for specified warnings). Skipping uninstallation."
             # Set up environment for Homebrew
             log "Updating shell configuration files to include Homebrew..."
-            add_brew_to_shell_rc "$HOME/.profile"
-            add_brew_to_shell_rc "$HOME/.bashrc"
-            add_brew_to_shell_rc "$HOME/.zshrc"
+            add_brew_to_shell_rc "$HOME_DIR/.bash_profile"
+            add_brew_to_shell_rc "$HOME_DIR/.zprofile"
             exit 0
         else
             log "Issues detected with Homebrew installation. Proceeding with uninstall..."
@@ -185,9 +188,8 @@ if [[ -d "$DEFAULT_HOMEBREW_PREFIX" || -d "$HOMEBREW_PREFIX" || -d "$brew_prefix
 fi
 
 # Remove Homebrew initialization from shell configuration files
-remove_brew_from_shell_rc "$HOME/.profile"
-remove_brew_from_shell_rc "$HOME/.bashrc"
-remove_brew_from_shell_rc "$HOME/.zshrc"
+remove_brew_from_shell_rc "$HOME_DIR/.bash_profile"
+remove_brew_from_shell_rc "$HOME_DIR/.zprofile"
 
 log "Uninstall complete. Proceeding to reinstallation."
 
@@ -224,9 +226,8 @@ fi
 
 # Set up environment for Homebrew
 log "Updating shell configuration files to include Homebrew..."
-add_brew_to_shell_rc "$HOME/.profile"
-add_brew_to_shell_rc "$HOME/.bashrc"
-add_brew_to_shell_rc "$HOME/.zshrc"
+add_brew_to_shell_rc "$HOME_DIR/.bash_profile"
+add_brew_to_shell_rc "$HOME_DIR/.zprofile"
 
 # Verify installation and suppress warning
 log "Running 'brew doctor' excluding specific checks to determine the installation status..."

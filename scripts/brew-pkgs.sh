@@ -59,6 +59,9 @@ fi
 
 log "Script is running as $interactive_user without superuser privileges."
 
+HOME_DIR=$(eval echo "~$interactive_user")
+log "Applying changes to home directory of user $interactive_user: $HOME_DIR"
+
 ###############################################################################
 # Install packages
 ###############################################################################
@@ -118,12 +121,14 @@ done
 
 # Shell completion commands
 declare -A bash_completions=(
+    ["direnv"]="eval $(direnv hook bash)"
     ["kubectl"]="source <(kubectl completion bash)"
     ["helm"]="source <(helm completion bash)"
     ["ripgrep"]="source <(rg --generate=complete-bash)"
 )
 
 declare -A zsh_completions=(
+    ["direnv"]="eval $(direnv hook zsh)"
     ["kubectl"]="source <(kubectl completion zsh)"
     ["helm"]="source <(helm completion zsh)"
     ["ripgrep"]="source <(rg --generate=complete-zsh)"
@@ -131,21 +136,15 @@ declare -A zsh_completions=(
 
 # Configuration files for different shells
 declare -A config_files=(
-    ["bash"]="$HOME/.bashrc"
-    ["zsh"]="$HOME/.zshrc"
+    ["bash"]="$HOME_DIR/.bash_profile"
+    ["zsh"]="$HOME_DIR/.zprofile"
 )
 
 log "Adding shell completion commands..."
 for shell in "${!config_files[@]}"; do
     config_file="${config_files[$shell]}"
+    touch "$config_file"
     if [[ -f "$config_file" ]]; then
-        if [[ "$shell" == "bash" ]]; then
-            # Ensure bash_completion is sourced before adding other completions
-            if ! grep -Fq 'source /etc/bash_completion' "$config_file"; then
-                echo 'source /etc/bash_completion' >>"$config_file"
-                log "Added source /etc/bash_completion to $config_file"
-            fi
-        fi
         declare -n completions="${shell}_completions"
         for cmd in "${completions[@]}"; do
             if ! grep -Fq "$cmd" "$config_file"; then
