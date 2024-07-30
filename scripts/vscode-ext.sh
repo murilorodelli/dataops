@@ -71,14 +71,20 @@ code --install-extension ms-azuretools.vscode-docker
 # https://marketplace.visualstudio.com/items?itemName=ms-kubernetes-tools.vscode-kubernetes-tools
 code --install-extension ms-kubernetes-tools.vscode-kubernetes-tools
 
+code --install-extension davidanson.vscode-markdownlint
+code --install-extension donjayamanne.githistory
 code --install-extension formulahendry.code-runner
 code --install-extension foxundermoon.shell-format
 code --install-extension jeff-hykin.better-shellscript-syntax
 code --install-extension kennylong.kubernetes-yaml-formatter
 code --install-extension mads-hartmann.bash-ide-vscode
 code --install-extension mkhl.direnv
+code --install-extension ms-python.debugpy
+code --install-extension ms-python.python
+code --install-extension ms-python.vscode-pylance
 code --install-extension pinage404.bash-extension-pack
 code --install-extension redhat.vscode-yaml
 code --install-extension rogalmic.bash-debug
 code --install-extension rpinski.shebang-snippets
+code --install-extension spmeesseman.vscode-taskexplorer
 code --install-extension timonwong.shellcheck
