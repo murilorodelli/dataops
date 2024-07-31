@@ -99,6 +99,7 @@ packages=(
     direnv
     k3d
     kubectl
+    kubectx
     helm
     k9s
 )
