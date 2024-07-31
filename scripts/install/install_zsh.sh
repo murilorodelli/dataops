@@ -162,10 +162,10 @@ zstyle ':omz:plugins:eza' 'icons' yes
 zstyle ':omz:plugins:eza' 'size-prefix' si
 zstyle ':omz:plugins:eza' 'time-style' relative
 
+zstyle ':omz:plugins:kubectl' aliases yes
+
 COMPLETION_WAITING_DOTS='true'
 HIST_STAMPS='yyyy-mm-dd'
-
-RPS1='\$(kubectx_prompt_info)'
 
 # Enable plugins
 plugins=(
@@ -193,6 +193,8 @@ source "\$ZSH/oh-my-zsh.sh"
 # Initialize Zsh completion system
 autoload -Uz compinit
 compinit
+
+RPS1=\$(kubectx_prompt_info)
 EOL
 
 # Apply new .zshrc configuration
