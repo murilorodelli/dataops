@@ -66,6 +66,8 @@ log "Script is running as $interactive_user without superuser privileges."
 install_scripts=(
     # system packages installation
     "sudo $script_dir/install/install_system_pkgs.sh"
+    # install zsh shell
+    "$script_dir/install/install_zsh.sh"
     # call home sanitizer script first
     "$script_dir/install/home_sanitizer.sh"
     # BIND9 installation

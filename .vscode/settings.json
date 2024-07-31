@@ -3,21 +3,5 @@
     "bashIde.shellcheckPath": "shellcheck",
     "bashIde.shfmt.path": "shfmt",
     "shellcheck.executablePath": "shellcheck",
-    "direnv.path.executable": "direnv",
-    "terminal.integrated.defaultProfile.linux": "bash",
-    "terminal.integrated.profiles.linux": {
-        "bash": {
-            "path": "bash",
-            "icon": "terminal-bash",
-            "args": ["-l"]
-        },
-        "zsh": {
-            "path": "zsh",
-            "args": ["-l"]
-        },
-        "tmux": {
-            "path": "tmux",
-            "icon": "terminal-tmux"
-        },
-    },
+    "direnv.path.executable": "direnv"
 }

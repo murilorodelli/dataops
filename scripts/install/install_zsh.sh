@@ -88,7 +88,7 @@ log "Installing Oh My Zsh..."
 if [ -d "$HOME_DIR/.oh-my-zsh" ]; then
     log "Oh My Zsh is already installed."
 else
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 fi
 
 # Check if Oh My Zsh installation succeeded
@@ -126,17 +126,73 @@ cat <<EOL >"$HOME_DIR/.zshrc"
 # Path to your oh-my-zsh installation.
 export ZSH="\$HOME/.oh-my-zsh"
 
+export EDITOR='nvim'
+export PATH=\$HOME/bin:\$HOME/.local/bin:/usr/local/bin:\$PATH
+export HOMEBREW_NO_AUTO_UPDATE=1
+
+# Include Linuxbrew completions
+if type brew &>/dev/null; then
+  FPATH=\$(brew --prefix)/share/zsh/site-functions:\$FPATH
+fi
+
 # Set name of the theme to load
-ZSH_THEME="robbyrussell"
+ZSH_THEME="murilasso"
+
+# just remind me to update when it's time
+zstyle ':omz:update' mode reminder
+
+# All aliases, in lib files and enabled plugins
+# zstyle ':omz:*' aliases no
+
+# All aliases in lib files
+zstyle ':omz:lib:*' aliases yes
+# Skip only aliases defined in the directories.zsh lib file
+#zstyle ':omz:lib:directories' aliases no
+
+# All plugin aliases
+zstyle ':omz:plugins:*' aliases no
+# Add some plugin aliases
+zstyle ':omz:plugins:eza' aliases yes
+
+zstyle ':omz:plugins:eza' 'dirs-first' yes
+zstyle ':omz:plugins:eza' 'git-status' yes
+zstyle ':omz:plugins:eza' 'header' yes
+zstyle ':omz:plugins:eza' 'show-group' yes
+zstyle ':omz:plugins:eza' 'icons' yes
+zstyle ':omz:plugins:eza' 'size-prefix' si
+zstyle ':omz:plugins:eza' 'time-style' relative
+
+COMPLETION_WAITING_DOTS='true'
+HIST_STAMPS='yyyy-mm-dd'
+
+RPS1='\$(kubectx_prompt_info)'
 
 # Enable plugins
 plugins=(
+  aliases
   git
+  gitfast
   zsh-autosuggestions
   zsh-syntax-highlighting
+  colored-man-pages
+  fzf
+  eza
+  direnv
+  brew
+  docker
+  helm
+  kubectl
+  kubectx
+  procs
+  # zoxide
 )
 
-source \$ZSH/oh-my-zsh.sh
+# shellcheck disable=SC1091
+source "\$ZSH/oh-my-zsh.sh"
+
+# Initialize Zsh completion system
+autoload -Uz compinit
+compinit
 EOL
 
 # Apply new .zshrc configuration

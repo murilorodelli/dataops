@@ -85,6 +85,7 @@ packages=(
     openldap
     ripgrep
     fd
+    fzf
     eza
     bat
     duf
@@ -121,23 +122,20 @@ done
 
 # Shell completion commands
 declare -A bash_completions=(
-    ["direnv"]="eval $(direnv hook bash)"
+    ["direnv"]="eval \"$(direnv hook bash)\""
     ["kubectl"]="source <(kubectl completion bash)"
     ["helm"]="source <(helm completion bash)"
     ["ripgrep"]="source <(rg --generate=complete-bash)"
 )
 
 declare -A zsh_completions=(
-    ["direnv"]="eval $(direnv hook zsh)"
-    ["kubectl"]="source <(kubectl completion zsh)"
-    ["helm"]="source <(helm completion zsh)"
-    ["ripgrep"]="source <(rg --generate=complete-zsh)"
+    # ["direnv"]="eval \"$(direnv hook zsh)\""
 )
 
 # Configuration files for different shells
 declare -A config_files=(
     ["bash"]="$HOME_DIR/.bash_profile"
-    ["zsh"]="$HOME_DIR/.zprofile"
+    # ["zsh"]="$HOME_DIR/.zshrc"
 )
 
 log "Adding shell completion commands..."

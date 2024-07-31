@@ -73,6 +73,7 @@ packages=(
     direnv
     shellcheck
     shfmt
+    openjdk-17-jdk
     pigz
     nftables
     git
@@ -80,6 +81,7 @@ packages=(
     bash
     bash-completion
     python3-venv
+    python3-wheel
     file
     xattr
     net-tools
