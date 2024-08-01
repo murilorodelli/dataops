@@ -3,12 +3,12 @@ kind: Service
 metadata:
   name: mysql
   namespace: mysql
-  annotations:
-    external-dns.alpha.kubernetes.io/hostname: mysql.k8s.local
+  labels:
+    app.kubernetes.io/name: mysql
 spec:
   type: LoadBalancer
   ports:
-  - port: 3306
-    targetPort: 3306
+    - port: 3306
+      targetPort: 3306
   selector:
     app: mysql

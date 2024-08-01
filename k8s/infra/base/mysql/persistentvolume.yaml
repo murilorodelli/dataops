@@ -3,10 +3,12 @@ kind: PersistentVolume
 metadata:
   name: mysql-pv
   namespace: mysql
+  labels:
+    app.kubernetes.io/name: mysql
 spec:
   capacity:
     storage: 1Gi
   accessModes:
-  - ReadWriteOnce
+    - ReadWriteOnce
   hostPath:
     path: "/mnt/data"

@@ -82,6 +82,7 @@ packages=(
     bash-completion
     python3-venv
     python3-wheel
+    uuid-dev
     file
     xattr
     net-tools

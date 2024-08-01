@@ -127,7 +127,7 @@ cat <<EOL >"$HOME_DIR/.zshrc"
 export ZSH="\$HOME/.oh-my-zsh"
 
 export EDITOR='nvim'
-export PATH=\$HOME/bin:\$HOME/.local/bin:/usr/local/bin:\$PATH
+export PATH=\$HOME/bin:\$HOME/.local/bin:/usr/local/bin:\${KREW_ROOT:-\$HOME/.krew}/bin:\$PATH
 export HOMEBREW_NO_AUTO_UPDATE=1
 
 # Include Linuxbrew completions

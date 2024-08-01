@@ -1,0 +1,12 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../../base/nginx
+
+namespace: local-nginx
+
+configMapGenerator:
+  - name: nginx-config
+    literals:
+      - NGINX_MODE=debug

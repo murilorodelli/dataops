@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: external-dns
+  namespace: external-dns
+spec:
+  template:
+    spec:
+      containers:
+      - name: external-dns
+        args:
+        - --source=service
+        - --source=ingress
+        - --domain-filter=$(DOMAIN_FILTER)
+        - --provider=google
+        - --google-project=$(GOOGLE_PROJECT)
+        - --google-service-account=$(GOOGLE_SERVICE_ACCOUNT)
+        - --google-zone-visibility=public
+        - --policy=upsert-only
+        - --registry=txt
+        - --txt-owner-id=my-identifier
+        envFrom:
+        - configMapRef:
+            name: external-dns-config
+        - secretRef:
+            name: external-dns-secrets

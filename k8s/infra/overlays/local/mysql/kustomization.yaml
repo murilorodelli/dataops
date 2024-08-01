@@ -1,0 +1,23 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../../base/mysql
+
+namespace: mysql
+
+labels:
+  - includeTemplates: true
+    pairs:
+      app.kubernetes.io/name: mysql
+
+commonAnnotations:
+  external-dns.alpha.kubernetes.io/hostname: mysql.k8s.local
+
+secretGenerator:
+  - literals:
+      - MYSQL_ROOT_PASSWORD=root
+    name: mysql-secrets
+
+patches:
+  - path: deployment-patch.yaml

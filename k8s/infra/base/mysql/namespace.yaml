@@ -3,4 +3,4 @@ kind: Namespace
 metadata:
   name: mysql
   labels:
-    name: mysql
+    app.kubernetes.io/name: mysql

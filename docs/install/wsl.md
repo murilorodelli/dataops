@@ -28,12 +28,6 @@
 1. **Instalar o WSL**:
 
     ```sh
-    wsl --install
-    ```
-
-2. **Opcional - Escolher Distribuição Linux**:
-
-    ```sh
     wsl -l -o
-    wsl --install -d <nome-da-distribuição>
+    wsl --install -d Ubuntu-24.04
     ```

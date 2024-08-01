@@ -100,7 +100,12 @@ packages=(
     k3d
     kubectl
     kubectx
+    krew
+    kustomize
     helm
+    popeye
+    kubescape
+    kubeconform
     k9s
 )
 
@@ -121,38 +126,28 @@ for package in "${packages[@]}"; do
     fi
 done
 
-# Shell completion commands
-declare -A bash_completions=(
-    ["direnv"]="eval \"$(direnv hook bash)\""
-    ["kubectl"]="source <(kubectl completion bash)"
-    ["helm"]="source <(helm completion bash)"
-    ["ripgrep"]="source <(rg --generate=complete-bash)"
+# Configuration file for bash
+BASH_CONFIG_FILE="$HOME/.bash_profile"
+
+# Shell completion commands for bash
+COMPLETIONS=(
+    'eval "$(direnv hook bash)"'
+    'source <(kubectl completion bash)'
+    'source <(helm completion bash)'
+    'source <(rg --generate=complete-bash)'
 )
 
-declare -A zsh_completions=(
-    # ["direnv"]="eval \"$(direnv hook zsh)\""
-)
+# Add shell completion commands to the bash config file
+echo "Adding shell completion commands to $BASH_CONFIG_FILE..."
 
-# Configuration files for different shells
-declare -A config_files=(
-    ["bash"]="$HOME_DIR/.bash_profile"
-    # ["zsh"]="$HOME_DIR/.zshrc"
-)
+# Ensure the configuration file exists
+touch "$BASH_CONFIG_FILE"
 
-log "Adding shell completion commands..."
-for shell in "${!config_files[@]}"; do
-    config_file="${config_files[$shell]}"
-    touch "$config_file"
-    if [[ -f "$config_file" ]]; then
-        declare -n completions="${shell}_completions"
-        for cmd in "${completions[@]}"; do
-            if ! grep -Fq "$cmd" "$config_file"; then
-                echo "$cmd" >>"$config_file"
-                log "Added $cmd to $config_file"
-            fi
-        done
-    else
-        log "Configuration file $config_file does not exist."
+# Add completions if they are not already present in the config file
+for cmd in "${COMPLETIONS[@]}"; do
+    if ! grep -Fq "$cmd" "$BASH_CONFIG_FILE"; then
+        echo "$cmd" >>"$BASH_CONFIG_FILE"
+        echo "Added '$cmd' to $BASH_CONFIG_FILE"
     fi
 done
 

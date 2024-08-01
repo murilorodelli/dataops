@@ -1,0 +1,13 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql
+  namespace: mysql
+spec:
+  template:
+    spec:
+      containers:
+        - name: mysql
+          envFrom:
+            - secretRef:
+                name: mysql-secrets
