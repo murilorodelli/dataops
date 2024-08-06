@@ -3,16 +3,9 @@ kind: Kustomization
 
 resources:
   - ../../../base/mysql
+  - namespace.yaml
 
 namespace: mysql
-
-labels:
-  - includeTemplates: true
-    pairs:
-      app.kubernetes.io/name: mysql
-
-commonAnnotations:
-  external-dns.alpha.kubernetes.io/hostname: mysql.k8s.local
 
 secretGenerator:
   - literals:
@@ -21,3 +14,8 @@ secretGenerator:
 
 patches:
   - path: deployment-patch.yaml
+  - path: service-patch.yaml
+
+images:
+  - name: mysql
+    newTag: "8.4.2"

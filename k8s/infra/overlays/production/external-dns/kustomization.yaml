@@ -3,15 +3,16 @@ kind: Kustomization
 
 resources:
   - ../../../base/external-dns
+  - namespace.yaml
 
 namespace: external-dns
 
-images:
-  - name: registry.k8s.io/external-dns/external-dns
-    newTag: v0.14.2
+labels:
+  - pairs:
+      app.kubernetes.io/name: external-dns
 
-patchesStrategicMerge:
-  - deployment-patch.yaml
+patches:
+  - path: deployment-patch.yaml
 
 configMapGenerator:
   - name: external-dns-config
@@ -21,5 +22,9 @@ configMapGenerator:
 secretGenerator:
   - name: external-dns-secrets
     literals:
-      - GOOGLE_PROJECT=my-production-project
-      - GOOGLE_SERVICE_ACCOUNT=my-service-account
+      - GOOGLE_PROJECT=<production-project>
+      - GOOGLE_SERVICE_ACCOUNT=<production-service-account>
+
+images:
+  - name: registry.k8s.io/external-dns/external-dns
+    newTag: "v0.14.2"

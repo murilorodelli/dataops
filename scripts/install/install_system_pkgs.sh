@@ -68,26 +68,50 @@ log "System packages have been upgraded successfully."
 
 # Define the packages to be installed
 packages=(
-    curl
-    wget
-    direnv
-    shellcheck
-    shfmt
-    openjdk-17-jdk
-    pigz
-    nftables
-    git
-    build-essential
     bash
     bash-completion
+    bat
+    bison
+    build-essential
+    cmake
+    curl
+    direnv
+    duf
+    eza
+    fd-find
+    file
+    fzf
+    gcc
+    git
+    luarocks
+    m4
+    make
+    mandoc
+    mysql-client
+    neovim
+    net-tools
+    nftables
+    nodejs
+    npm
+    openjdk-17-jdk
+    openssl
+    perl
+    pigz
+    procps
     python3-venv
     python3-wheel
+    ripgrep
+    shellcheck
+    shfmt
+    sqlite3
+    tldr
+    unzip
+    util-linux
     uuid-dev
-    file
+    wget
     xattr
-    net-tools
-    procps
-    mysql-client
+    xclip
+    zoxide
 )
 
 log "Starting package installation..."

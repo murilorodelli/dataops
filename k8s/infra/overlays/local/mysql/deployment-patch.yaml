@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: mysql
-  namespace: mysql
 spec:
   template:
     spec:
@@ -11,3 +10,10 @@ spec:
           envFrom:
             - secretRef:
                 name: mysql-secrets
+          resources:
+            requests:
+              cpu: "250m" # Minimum CPU request in milliCPU units
+              memory: "512Mi" # Minimum memory request in Mebibytes
+            limits:
+              cpu: "500m" # Maximum CPU limit in milliCPU units
+              memory: "1Gi" # Maximum memory limit in Mebibytes

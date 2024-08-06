@@ -3,6 +3,7 @@ kind: Kustomization
 
 resources:
   - ../../../base/external-dns
+  - namespace.yaml
 
 namespace: external-dns
 
@@ -21,3 +22,7 @@ secretGenerator:
       - RFC2136_ZONE=k8s.local
       - RFC2136_TSIG_SECRET=A0DlkzhsT32fy5rHnYmWLF8T90c52+g3Uh+ABYGgLGE=
     name: external-dns-secrets
+
+images:
+  - name: registry.k8s.io/external-dns/external-dns
+    newTag: "v0.14.2"

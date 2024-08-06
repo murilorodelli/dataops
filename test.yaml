@@ -1,0 +1,126 @@
+apiVersion: "sparkoperator.k8s.io/v1beta2"
+kind: SparkApplication
+metadata:
+  name: "{{ params.k8s_metadata_name }}"
+  namespace: "{{ params.namespace }}"
+spec:
+  volumes:
+    - name: ivy
+      emptyDir: {}
+  sparkConf:
+    spark.driver.extraJavaOptions: "{{ params.spark_driver_extraJavaOptions }}"
+    spark.executor.extraJavaOptions: "{{ params.spark_executor_extraJavaOptions }}"
+    spark.kubernetes.allocation.batch.size: "10"
+  hadoopConf:
+    fs.s3a.impl: "{{ params.fs_s3a_impl }}"
+    fs.s3a.path.style.access: "True"
+  type: Python
+  pythonVersion: "3"
+  image: "{{ params.ecr_image }}"
+  imagePullPolicy: Always
+  mainApplicationFile: "{{ params.main_application_file}}"
+  sparkVersion: "{{ params.spark_version}}"
+  # tolerations:
+  #   - key: app
+  #     operator: Equal
+  #     value: "ifrs9up"
+  #     effect: NoSchedule
+  nodeSelector:
+    app: ifrs9up
+  restartPolicy:
+    type: Never
+  driver:
+    envVars:
+      TIPO_EXECUCAO: "{{ params.tipo_execucao }}"
+      SFURL: "{{ params.sfurl }}"
+      SFACCOUNT: "{{ params.sfaccount }}"
+      SFWH: "{{ params.sfwh }}"
+      SFROLE: "{{ params.sfrole }}"
+      LANDING_ZONE_BUCKET: "{{ params.landing_bucket }}"
+      BRONZE_BUCKET: "{{ params.bronze_bucket }}"
+      DATA_REFERENCIA: "{{ params.data_referencia}}"
+      USER_SNOW: "{{ params.user_snow }}"
+      ACCOUNT_SNOW: "{{ params.account_snow }}"
+      WAREHOUSE_SNOW: "{{ params.warehouse_snow }}"
+      DATABASE_SNOW: "{{ params.database_snow }}"
+      SCHEMA_SNOW: "{{ params.schema_snow }}"
+      LOTE: "{{ params.lote }}"
+      NOME_FLUXO: "{{ params.nome_fluxo }}"
+      ENVIRONMENT: "{{ params.environment }}"
+      REGION: "{{ params.region }}"
+      SFADMROLE: "{{ params.sfadmrole }}"
+    envSecretKeyRefs:
+      AWS_ACCESS_KEY_ID:
+        name: aws-secret
+        key: awsAccessKeyId
+      AWS_SECRET_ACCESS_KEY:
+        name: aws-secret
+        key: awsSecretAccessKey
+      SFUSER:
+        name: snowflake-secret
+        key: SFUSER
+      SFPASSWORD:
+        name: snowflake-secret
+        key: SFPASSWORD
+    cores: "{{ params.driver_cores }}"
+    coreLimit: "{{ params.driver_core_limit }}"
+    memory: "{{ params.driver_memory }}"
+    labels:
+      version: 3.1.1
+    serviceAccount: spark-operator-newer
+    volumeMounts:
+      - name: ivy
+        mountPath: /tmp
+    # tolerations:
+    #   - key: app
+    #     operator: Equal
+    #     value: "ifrs9up"
+    #     effect: NoSchedule
+    # nodeSelector:
+    #   app: ifrs9up
+  executor:
+    envVars:
+      TIPO_EXECUCAO: "{{ params.tipo_execucao }}"
+      SFURL: "{{ params.sfurl }}"
+      SFACCOUNT: "{{ params.sfaccount }}"
+      SFWH: "{{ params.sfwh }}"
+      SFROLE: "{{ params.sfrole }}"
+      LANDING_ZONE_BUCKET: "{{ params.landing_bucket }}"
+      BRONZE_BUCKET: "{{ params.bronze_bucket }}"
+      DATA_REFERENCIA: "{{ params.data_referencia }}"
+      USER_SNOW: "{{ params.user_snow }}"
+      ACCOUNT_SNOW: "{{ params.account_snow }}"
+      WAREHOUSE_SNOW: "{{ params.warehouse_snow }}"
+      DATABASE_SNOW: "{{ params.database_snow }}"
+      SCHEMA_SNOW: "{{ params.schema_snow }}"
+      LOTE: "{{ params.lote }}"
+      NOME_FLUXO: "{{ params.nome_fluxo }}"
+      ENVIRONMENT: "{{ params.environment }}"
+      REGION: "{{ params.region }}"
+      SFADMROLE: "{{ params.sfadmrole }}"
+    envSecretKeyRefs:
+      AWS_ACCESS_KEY_ID:
+        name: aws-secret
+        key: awsAccessKeyId
+      AWS_SECRET_ACCESS_KEY:
+        name: aws-secret
+        key: awsSecretAccessKey
+      SFUSER:
+        name: snowflake-secret
+        key: SFUSER
+      SFPASSWORD:
+        name: snowflake-secret
+        key: SFPASSWORD
+    cores: "{{ params.executor_cores }}"
+    instances: "{{ params.executor_instances}}"
+    memory: "{{ params.executor_memory }}"
+    labels:
+      version: 3.1.1
+    serviceAccount: spark-operator-newer
+    # tolerations:
+    #   - key: app
+    #     operator: Equal
+    #     value: "ifrs9up"
+    #     effect: NoSchedule
+    # nodeSelector:
+    #   app: ifrs9up

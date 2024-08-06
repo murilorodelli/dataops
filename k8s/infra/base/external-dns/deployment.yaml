@@ -2,9 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: external-dns
-  namespace: external-dns
-  labels:
-    app.kubernetes.io/name: external-dns
 spec:
   strategy:
     type: Recreate
@@ -19,12 +16,5 @@ spec:
       serviceAccountName: external-dns
       containers:
         - name: external-dns
-          image: registry.k8s.io/external-dns/external-dns
-          args: [] # Placeholder, will be replaced by overlays
-          resources:
-            requests:
-              memory: "128Mi"
-              cpu: "256m"
-            limits:
-              memory: "128Mi"
-              cpu: "256m"
+          image: registry.k8s.io/external-dns/external-dns:latest # Specify your image and tag here
+          args: [] # Placeholder; will be replaced by overlays

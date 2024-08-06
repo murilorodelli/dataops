@@ -72,19 +72,22 @@ fi
 ###############################################################################
 # Start K3D cluster
 ###############################################################################
+
 conf_dir="$script_dir/../conf"
 if [[ ! -d "$conf_dir" ]]; then
     error "Could not determine the config directory of k3d."
 fi
 
 # Ensure the data and registry directories exist
-mkdir -p "${home_dir}/.k3d/{data,registry}"
+mkdir -p "${home_dir}"/.k3d/{data,registry}
 
 log "Checking for existing k3d cluster..."
 if k3d cluster list | grep -q 'local'; then
-    log "Existing k3d cluster 'local' found. Exiting"
-else
-    log "Creating k3d cluster 'local'..."
-    k3d cluster create local --config "$conf_dir/k3d/config.yaml" || error "Failed to create k3d cluster 'local'."
-    success "Cluster 'local' created successfully."
+    log "Existing k3d cluster 'local' found. Deleting..."
+    k3d cluster delete local || error "Failed to delete existing k3d cluster."
+    success "Existing k3d cluster 'local' deleted."
 fi
+
+log "Creating k3d cluster 'local'..."
+k3d cluster create local --config "$conf_dir/k3d/config.yaml" --verbose || error "Failed to create k3d cluster 'local'."
+success "Cluster 'local' created successfully."

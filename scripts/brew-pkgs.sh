@@ -78,11 +78,10 @@ packages=(
     make
     m4
     bison
-    krb5
     mandoc
     sqlite
     util-linux
-    openldap
+    luarocks
     ripgrep
     fd
     fzf
@@ -94,6 +93,7 @@ packages=(
     procs
     zoxide
     neovim
+    lazygit
     shfmt
     shellcheck
     direnv
