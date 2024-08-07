@@ -24,10 +24,9 @@ spec:
             - secretRef:
                 name: external-dns-secrets
           resources:
-            limits:
-              cpu: "10m" # Maximum CPU limit in milliCPU units
-              memory: "32Mi" # Maximum memory limit in Mebibytes
             requests:
-              cpu: "5m" # Minimum CPU request in milliCPU units
-              memory: "16Mi" # Minimum memory request in Mebibytes
-
+              cpu: "250m"
+              memory: "256Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"

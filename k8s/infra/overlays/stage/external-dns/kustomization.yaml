@@ -7,10 +7,6 @@ resources:
 
 namespace: external-dns
 
-labels:
-  - pairs:
-      app.kubernetes.io/name: external-dns
-
 patches:
   - path: deployment-patch.yaml
 

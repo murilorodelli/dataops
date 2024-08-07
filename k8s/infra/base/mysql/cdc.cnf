@@ -1,0 +1,16 @@
+[mysqld]
+# Replication and Binary Logging
+server_id=1
+log_bin=ON
+binlog_format=ROW
+binlog_row_image=FULL
+binlog_expire_logs_seconds=2592000
+binlog_row_value_options=PARTIAL_JSON
+
+# GTID Configuration
+gtid_mode=ON
+enforce_gtid_consistency=ON
+
+# Timeout Settings
+interactive_timeout=2592000
+wait_timeout=2592000

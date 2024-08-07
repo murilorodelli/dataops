@@ -6,3 +6,13 @@ resources:
   - persistentvolumeclaim.yaml
   - deployment.yaml
   - service.yaml
+
+configMapGenerator:
+  - name: mysql-config
+    files:
+      - cdc.cnf=cdc.cnf
+
+secretGenerator:
+  - name: mysql-secrets
+    literals:
+      - MYSQL_ROOT_PASSWORD=admin

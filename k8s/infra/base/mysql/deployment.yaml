@@ -3,6 +3,7 @@ kind: Deployment
 metadata:
   name: mysql
 spec:
+  replicas: 1
   selector:
     matchLabels:
       app.kubernetes.io/name: mysql
@@ -14,15 +15,31 @@ spec:
         app.kubernetes.io/name: mysql
     spec:
       containers:
-        - image: mysql
-          name: mysql
+        - name: mysql
+          image: mysql:latest
+          envFrom:
+            - secretRef:
+                name: mysql-secrets
           ports:
             - containerPort: 3306
               name: mysql
           volumeMounts:
             - name: mysql-persistent-storage
               mountPath: /var/lib/mysql
+            - name: mysql-config
+              mountPath: /etc/mysql/conf.d/cdc.cnf
+              subPath: cdc.cnf
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "512Mi"
+            limits:
+              cpu: "500m"
+              memory: "1Gi"
       volumes:
         - name: mysql-persistent-storage
           persistentVolumeClaim:
             claimName: mysql-pvc
+        - name: mysql-config
+          configMap:
+            name: mysql-config

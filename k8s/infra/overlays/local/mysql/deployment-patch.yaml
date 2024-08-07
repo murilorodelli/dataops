@@ -7,13 +7,19 @@ spec:
     spec:
       containers:
         - name: mysql
-          envFrom:
-            - secretRef:
-                name: mysql-secrets
           resources:
             requests:
-              cpu: "250m" # Minimum CPU request in milliCPU units
-              memory: "512Mi" # Minimum memory request in Mebibytes
+              cpu: "250m"
+              memory: "512Mi"
             limits:
-              cpu: "500m" # Maximum CPU limit in milliCPU units
-              memory: "1Gi" # Maximum memory limit in Mebibytes
+              cpu: "500m"
+              memory: "1Gi"
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: worker
+                    operator: In
+                    values:
+                      - "true"

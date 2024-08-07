@@ -16,5 +16,12 @@ spec:
       serviceAccountName: external-dns
       containers:
         - name: external-dns
-          image: registry.k8s.io/external-dns/external-dns:latest # Specify your image and tag here
+          image: registry.k8s.io/external-dns/external-dns:latest
           args: [] # Placeholder; will be replaced by overlays
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "512Mi"
+            limits:
+              cpu: "500m"
+              memory: "1Gi"

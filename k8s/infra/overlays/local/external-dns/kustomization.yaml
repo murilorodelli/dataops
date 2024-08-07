@@ -13,13 +13,13 @@ patches:
 configMapGenerator:
   - literals:
       - DOMAIN_FILTER=k8s.local
+      - RFC2136_HOST=172.31.0.51
+      - RFC2136_PORT=53
+      - RFC2136_ZONE=k8s.local
     name: external-dns-config
 
 secretGenerator:
   - literals:
-      - RFC2136_HOST=172.31.0.51
-      - RFC2136_PORT=53
-      - RFC2136_ZONE=k8s.local
       - RFC2136_TSIG_SECRET=A0DlkzhsT32fy5rHnYmWLF8T90c52+g3Uh+ABYGgLGE=
     name: external-dns-secrets
 

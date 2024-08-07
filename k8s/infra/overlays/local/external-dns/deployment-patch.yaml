@@ -28,8 +28,17 @@ spec:
                 name: external-dns-secrets
           resources:
             requests:
-              cpu: "250m" # Minimum CPU request in milliCPU units
-              memory: "512Mi" # Minimum memory request in Mebibytes
+              cpu: "250m"
+              memory: "256Mi"
             limits:
-              cpu: "500m" # Maximum CPU limit in milliCPU units
-              memory: "1Gi" # Maximum memory limit in Mebibytes
+              cpu: "500m"
+              memory: "512Mi"
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: worker
+                    operator: In
+                    values:
+                      - "true"

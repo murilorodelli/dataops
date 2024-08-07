@@ -7,15 +7,10 @@ resources:
 
 namespace: mysql
 
-secretGenerator:
-  - literals:
-      - MYSQL_ROOT_PASSWORD=root
-    name: mysql-secrets
-
 patches:
   - path: deployment-patch.yaml
   - path: service-patch.yaml
 
 images:
-  - name: mysql
-    newTag: "8.4.2"
+  - name: mysql:latest
+    newTag: "9.0.1"

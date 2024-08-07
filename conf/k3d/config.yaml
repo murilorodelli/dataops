@@ -54,6 +54,10 @@ options:
       - arg: "--tls-san=127.0.0.1"
         nodeFilters:
           - server:*
+    nodeLabels:
+      - label: worker=true # same as `--k3s-node-label 'foo=bar@agent:1'` -> this results in a Kubernetes node label
+        nodeFilters:
+          - agent:*
   kubeconfig:
     updateDefaultKubeconfig: true
     switchCurrentContext: true
