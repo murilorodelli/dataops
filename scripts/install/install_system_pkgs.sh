@@ -83,10 +83,13 @@ packages=(
     fzf
     gcc
     git
+    lazydocker
+    lazygit
     luarocks
     m4
     make
     mandoc
+    mycli
     mysql-client
     neovim
     net-tools
@@ -96,6 +99,7 @@ packages=(
     openjdk-17-jdk
     openssl
     perl
+    pgcli
     pigz
     procps
     python3-venv

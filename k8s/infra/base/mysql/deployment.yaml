@@ -14,12 +14,52 @@ spec:
       labels:
         app.kubernetes.io/name: mysql
     spec:
+      initContainers:
+        - name: init-config
+          image: busybox
+          command:
+            - /bin/sh
+            - -c
+            - |
+              echo "Replacing environment variables in init scripts..."
+              cp /mysql-init-scripts/*.sql /docker-entrypoint-initdb.d/
+              sed -i 's/{{DEBEZIUM_USER_PASSWORD}}/'"$DEBEZIUM_USER_PASSWORD"'/g' /docker-entrypoint-initdb.d/*.sql
+              echo "Environment variables in init scripts replaced."
+          env:
+            - name: DEBEZIUM_USER_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secrets
+                  key: debezium-user-password
+          volumeMounts:
+            - name: mysql-init-scripts
+              mountPath: /mysql-init-scripts
+            - name: docker-entrypoint-initdb
+              mountPath: /docker-entrypoint-initdb.d
       containers:
         - name: mysql
           image: mysql:latest
-          envFrom:
-            - secretRef:
-                name: mysql-secrets
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secrets
+                  key: mysql-root-password
+            - name: MYSQL_DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  name: mysql-env
+                  key: mysql-database
+            - name: MYSQL_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: mysql-env
+                  key: mysql-user
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secrets
+                  key: mysql-password
           ports:
             - containerPort: 3306
               name: mysql
@@ -27,8 +67,9 @@ spec:
             - name: mysql-persistent-storage
               mountPath: /var/lib/mysql
             - name: mysql-config
-              mountPath: /etc/mysql/conf.d/cdc.cnf
-              subPath: cdc.cnf
+              mountPath: /etc/mysql/conf.d
+            - name: docker-entrypoint-initdb
+              mountPath: /docker-entrypoint-initdb.d
           resources:
             requests:
               cpu: "250m"
@@ -36,6 +77,16 @@ spec:
             limits:
               cpu: "500m"
               memory: "1Gi"
+          livenessProbe:
+            tcpSocket:
+              port: 3306
+            initialDelaySeconds: 60
+            timeoutSeconds: 5
+          readinessProbe:
+            tcpSocket:
+              port: 3306
+            initialDelaySeconds: 30
+            timeoutSeconds: 5
       volumes:
         - name: mysql-persistent-storage
           persistentVolumeClaim:
@@ -43,3 +94,8 @@ spec:
         - name: mysql-config
           configMap:
             name: mysql-config
+        - name: mysql-init-scripts
+          configMap:
+            name: mysql-init-scripts
+        - name: docker-entrypoint-initdb
+          emptyDir: {}

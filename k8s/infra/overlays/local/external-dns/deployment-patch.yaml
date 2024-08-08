@@ -22,8 +22,6 @@ spec:
             - --registry=txt
             - --txt-owner-id=external-dns
           envFrom:
-            - configMapRef:
-                name: external-dns-config
             - secretRef:
                 name: external-dns-secrets
           resources:

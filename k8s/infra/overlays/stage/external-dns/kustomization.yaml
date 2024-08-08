@@ -10,14 +10,10 @@ namespace: external-dns
 patches:
   - path: deployment-patch.yaml
 
-configMapGenerator:
-  - name: external-dns-config
-    literals:
-      - DOMAIN_FILTER=k8s.stage
-
 secretGenerator:
   - name: external-dns-secrets
     literals:
+      - DOMAIN_FILTER=k8s.stage
       - GOOGLE_PROJECT=<stage-project>
       - GOOGLE_SERVICE_ACCOUNT=<stage-service-account>
 

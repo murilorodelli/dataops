@@ -10,9 +10,18 @@ resources:
 configMapGenerator:
   - name: mysql-config
     files:
-      - cdc.cnf=cdc.cnf
+      - cdc.cnf=conf.d/cdc.cnf
+  - name: mysql-init-scripts
+    files:
+      - debezium_setup.sql=initdb.d/debezium_setup.sql
+  - name: mysql-env
+    literals:
+      - mysql-database=sourcedb
+      - mysql-user=sourcedb_user
 
 secretGenerator:
   - name: mysql-secrets
     literals:
-      - MYSQL_ROOT_PASSWORD=admin
+      - mysql-root-password=secret
+      - mysql-password=secret
+      - debezium-user-password=secret
