@@ -21,6 +21,8 @@ spec:
             - --rfc2136-tsig-axfr
             - --registry=txt
             - --txt-owner-id=external-dns
+            - --events
+            - --min-event-sync-interval=1s
           envFrom:
             - secretRef:
                 name: external-dns-secrets

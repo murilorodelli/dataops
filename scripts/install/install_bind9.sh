@@ -135,13 +135,6 @@ k8s.local.      IN      A       $PRIMARY_IFACE_IP
 
 ; A record for the name server
 ns              IN      A       $PRIMARY_IFACE_IP
-
-; Additional A records
-; api             IN      A       $PRIMARY_IFACE_IP
-; web             IN      A       $PRIMARY_IFACE_IP
-
-; CNAME records
-; www             IN      CNAME   web.k8s.local.
 EOF
 success "Zone file for k8s.local created with ns record IP: $PRIMARY_IFACE_IP"
 

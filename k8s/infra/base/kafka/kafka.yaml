@@ -1,0 +1,65 @@
+apiVersion: kafka.strimzi.io/v1beta2
+kind: Kafka
+metadata:
+  name: integrationhub
+spec:
+  kafka:
+    version: 3.8.0
+    replicas: 3
+    listeners:
+      - name: plain
+        port: 9092
+        type: internal
+        tls: false
+      - name: tls
+        port: 9093
+        type: internal
+        tls: true
+      # - name: external
+      #   port: 9094
+      #   type: loadbalancer
+      #   tls: true
+      #   configuration:
+      #     bootstrap:
+      #       annotations:
+      #         external-dns.alpha.kubernetes.io/hostname: kafka-bootstrap.k8s.local.
+      #       alternativeNames:
+      #         - kafka-bootstrap.k8s.local
+      #     brokers:
+      #       - broker: 0
+      #         annotations:
+      #           external-dns.alpha.kubernetes.io/hostname: kafka-broker-0.k8s.local.
+      #         advertisedHost: kafka-broker-0.k8s.local
+      #       - broker: 1
+      #         annotations:
+      #           external-dns.alpha.kubernetes.io/hostname: kafka-broker-1.k8s.local.
+      #         advertisedHost: kafka-broker-1.k8s.local
+      #       - broker: 2
+      #         annotations:
+      #           external-dns.alpha.kubernetes.io/hostname: kafka-broker-2.k8s.local.
+      #         advertisedHost: kafka-broker-2.k8s.local
+    config:
+      offsets.topic.replication.factor: 3
+      transaction.state.log.replication.factor: 3
+      transaction.state.log.min.isr: 2
+      default.replication.factor: 3
+      min.insync.replicas: 2
+      inter.broker.protocol.version: "3.8"
+    storage:
+      type: ephemeral
+      # type: jbod
+      # volumes:
+      #   - id: 0
+      #     type: persistent-claim
+      #     size: 2Gi
+      #     deleteClaim: true
+  zookeeper:
+    replicas: 3
+    storage:
+      type: ephemeral
+      # type: persistent-claim
+      # size: 2Gi
+      # deleteClaim: true
+  entityOperator:
+    topicOperator: {}
+    userOperator: {}
