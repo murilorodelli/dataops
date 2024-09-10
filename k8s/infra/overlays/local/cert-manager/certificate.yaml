@@ -1,0 +1,15 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: k8s-local-cert
+  namespace: cert-manager
+spec:
+  secretName: k8s-local-cert-secret
+  duration: 2160h # 90 days
+  renewBefore: 360h # 15 days before expiration
+  commonName: "*.k8s.local"
+  dnsNames:
+    - "*.k8s.local"
+  issuerRef:
+    name: self-signed-issuer
+    kind: Issuer

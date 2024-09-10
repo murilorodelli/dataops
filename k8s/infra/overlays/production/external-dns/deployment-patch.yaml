@@ -20,7 +20,7 @@ spec:
             - --txt-owner-id=external-dns
           envFrom:
             - secretRef:
-                name: external-dns-secrets
+                name: external-dns-secret
           resources:
             requests:
               cpu: "250m"

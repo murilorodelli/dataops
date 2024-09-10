@@ -135,6 +135,7 @@ k8s.local.      IN      A       $PRIMARY_IFACE_IP
 
 ; A record for the name server
 ns              IN      A       $PRIMARY_IFACE_IP
+registry        IN      A       $PRIMARY_IFACE_IP
 EOF
 success "Zone file for k8s.local created with ns record IP: $PRIMARY_IFACE_IP"
 

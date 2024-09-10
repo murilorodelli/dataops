@@ -31,17 +31,17 @@ env:
   - envVar: DEPLOY_ENV=${DEPLOY_ENV}
     nodeFilters:
       - all
-registries:
-  create:
-    name: registry.localhost
-    host: "0.0.0.0"
-    hostPort: "5000"
-    proxy:
-      remoteURL: https://registry-1.docker.io
-      username: ""
-      password: ""
-    volumes:
-      - ${HOME}/.k3d/registry:/var/lib/registry
+# registries:
+#   create:
+#     name: registry
+#     host: "0.0.0.0"
+#     hostPort: "5000"
+#     # proxy:
+#     #   remoteURL: https://registry-1.docker.io
+#     #   username: ""
+#     #   password: ""
+#     volumes:
+#       - ${HOME}/.k3d/registry:/var/lib/registry
 options:
   k3d:
     wait: true

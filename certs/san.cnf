@@ -1,0 +1,24 @@
+[req]
+default_bits       = 4096
+distinguished_name = req_distinguished_name
+req_extensions     = req_ext
+x509_extensions    = v3_ca
+prompt             = no
+
+[req_distinguished_name]
+C = US
+ST = California
+L = Los Angeles
+O = United Engineers
+OU = IT Department
+CN = *.k8s.local
+
+[req_ext]
+subjectAltName = @alt_names
+
+[v3_ca]
+subjectAltName = @alt_names
+
+[alt_names]
+DNS.1 = *.k8s.local
+DNS.2 = k8s.local

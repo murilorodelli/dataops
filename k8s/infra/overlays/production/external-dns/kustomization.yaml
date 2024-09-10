@@ -3,7 +3,6 @@ kind: Kustomization
 
 resources:
   - ../../../base/external-dns
-  - namespace.yaml
 
 namespace: external-dns
 
@@ -11,7 +10,7 @@ patches:
   - path: deployment-patch.yaml
 
 secretGenerator:
-  - name: external-dns-secrets
+  - name: external-dns-secret
     literals:
       - DOMAIN_FILTER=k8s.production
       - GOOGLE_PROJECT=<production-project>

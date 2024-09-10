@@ -1,0 +1,80 @@
+This is my scenario:
+    - Ubuntu-24.04 in WSL
+    - Bind9 as DNS server
+    - k3d kubernetes cluster
+    - I use kustomize for resource deployment
+    - k8s.local domain in bind9 managed by external-dns
+    - self issued certificate managed by cert-manager
+    - issuer: "self-signed-issuer", secret: "k8s-local-cert-secret" in local overlay
+    - current resources
+
+ k8s
+├──  infra
+│  ├──  base
+│  │  ├──  apicurio-registry
+│  │  │  ├──  apicurio-registry.yaml
+│  │  │  ├──  kustomization.yaml
+│  │  │  └──  namespace.yaml
+│  │  ├──  cert-manager
+│  │  │  ├──  kustomization.yaml
+│  │  │  └──  namespace.yaml
+│  │  ├──  external-dns
+│  │  │  ├──  clusterrole.yaml
+│  │  │  ├──  clusterrolebinding.yaml
+│  │  │  ├──  deployment.yaml
+│  │  │  ├──  kustomization.yaml
+│  │  │  ├──  namespace.yaml
+│  │  │  └──  serviceaccount.yaml
+│  │  ├──  kafka
+│  │  │  ├──  connect.yaml
+│  │  │  ├──  kafka.yaml
+│  │  │  ├──  kustomization.yaml
+│  │  │  ├──  namespace.yaml
+│  │  │  └──  topic.yaml
+│  │  ├──  kafka-ui
+│  │  │  ├──  deployment.yaml
+│  │  │  ├──  ingress.yaml
+│  │  │  ├──  kustomization.yaml
+│  │  │  ├──  namespace.yaml
+│  │  │  └──  service.yaml
+│  │  ├──  mysql
+│  │  │  ├──  conf.d
+│  │  │  │  └──  cdc.cnf
+│  │  │  ├──  initdb.d
+│  │  │  │  └──  debezium_setup.sql
+│  │  │  ├──  deployment.yaml
+│  │  │  ├──  kustomization.yaml
+│  │  │  ├──  namespace.yaml
+│  │  │  ├──  persistentvolumeclaim.yaml
+│  │  │  └──  service.yaml
+│  └──  overlays
+│     ├──  local
+│     │  ├──  apicurio-registry
+│     │  │  └──  kustomization.yaml
+│     │  ├──  cert-manager
+│     │  │  ├──  certificate.yaml
+│     │  │  ├──  issuer.yaml
+│     │  │  └──  kustomization.yaml
+│     │  ├──  external-dns
+│     │  │  ├──  deployment-patch.yaml
+│     │  │  └──  kustomization.yaml
+│     │  ├──  kafka
+│     │  │  └──  kustomization.yaml
+│     │  ├──  kafka-ui
+│     │  │  └──  kustomization.yaml
+│     │  ├──  mysql
+│     │  │  ├──  deployment-patch.yaml
+│     │  │  ├──  kustomization.yaml
+│     │  │  └──  service-patch.yaml
+│     │  └──  kustomization.yaml
+│     ├──  production
+│     │  ├──  external-dns
+│     │  │  ├──  deployment-patch.yaml
+│     │  │  └──  kustomization.yaml
+│     │  └──  kustomization.yaml
+│     └──  stage
+│        ├──  external-dns
+│        │  ├──  deployment-patch.yaml
+│        │  └──  kustomization.yaml
+│        └──  kustomization.yaml
+└──  lakehouse

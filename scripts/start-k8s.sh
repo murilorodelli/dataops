@@ -154,6 +154,18 @@ else
 fi
 
 ###############################################################################
+# Install Cert Manager Operator
+###############################################################################
+
+log "Installing Cert Manager Operator..."
+
+if kubectl create -f https://operatorhub.io/install/cert-manager.yaml; then
+    success "Cert Manager Operator installed successfully."
+else
+    error "Failed to install Cert Manager Operator."
+fi
+
+###############################################################################
 # Install Ingress NGINX
 ###############################################################################
 

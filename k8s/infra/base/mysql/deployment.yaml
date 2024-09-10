@@ -23,14 +23,20 @@ spec:
             - |
               echo "Replacing environment variables in init scripts..."
               cp /mysql-init-scripts/*.sql /docker-entrypoint-initdb.d/
-              sed -i 's/{{DEBEZIUM_USER_PASSWORD}}/'"$DEBEZIUM_USER_PASSWORD"'/g' /docker-entrypoint-initdb.d/*.sql
+              sed -i 's/{{DEBEZIUM_USERNAME}}/'"$DEBEZIUM_USERNAME"'/g' /docker-entrypoint-initdb.d/*.sql
+              sed -i 's/{{DEBEZIUM_PASSWORD}}/'"$DEBEZIUM_PASSWORD"'/g' /docker-entrypoint-initdb.d/*.sql
               echo "Environment variables in init scripts replaced."
           env:
-            - name: DEBEZIUM_USER_PASSWORD
+            - name: DEBEZIUM_USERNAME
               valueFrom:
                 secretKeyRef:
-                  name: mysql-secrets
-                  key: debezium-user-password
+                  name: debezium-secret
+                  key: username
+            - name: DEBEZIUM_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: debezium-secret
+                  key: password
           volumeMounts:
             - name: mysql-init-scripts
               mountPath: /mysql-init-scripts
@@ -40,25 +46,25 @@ spec:
         - name: mysql
           image: mysql:latest
           env:
-            - name: MYSQL_ROOT_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: mysql-secrets
-                  key: mysql-root-password
             - name: MYSQL_DATABASE
               valueFrom:
                 configMapKeyRef:
                   name: mysql-env
                   key: mysql-database
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secret
+                  key: mysql-root-password
             - name: MYSQL_USER
               valueFrom:
-                configMapKeyRef:
-                  name: mysql-env
+                secretKeyRef:
+                  name: mysql-secret
                   key: mysql-user
             - name: MYSQL_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: mysql-secrets
+                  name: mysql-secret
                   key: mysql-password
           ports:
             - containerPort: 3306

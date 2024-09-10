@@ -25,7 +25,7 @@ spec:
             - --min-event-sync-interval=1s
           envFrom:
             - secretRef:
-                name: external-dns-secrets
+                name: external-dns-secret
           resources:
             requests:
               cpu: "250m"
