@@ -145,25 +145,25 @@ fi
 # Install Apicurio Registry Operator
 ###############################################################################
 
-log "Installing Apicurio Registry Operator..."
+# log "Installing Apicurio Registry Operator..."
 
-if kubectl create -f https://operatorhub.io/install/apicurio-registry.yaml; then
-    success "Apicurio Registry Operator installed successfully."
-else
-    error "Failed to install Apicurio Registry Operator."
-fi
+# if kubectl create -f https://operatorhub.io/install/apicurio-registry.yaml; then
+#     success "Apicurio Registry Operator installed successfully."
+# else
+#     error "Failed to install Apicurio Registry Operator."
+# fi
 
 ###############################################################################
 # Install Cert Manager Operator
 ###############################################################################
 
-log "Installing Cert Manager Operator..."
+# log "Installing Cert Manager Operator..."
 
-if kubectl create -f https://operatorhub.io/install/cert-manager.yaml; then
-    success "Cert Manager Operator installed successfully."
-else
-    error "Failed to install Cert Manager Operator."
-fi
+# if kubectl create -f https://operatorhub.io/install/cert-manager.yaml; then
+#     success "Cert Manager Operator installed successfully."
+# else
+#     error "Failed to install Cert Manager Operator."
+# fi
 
 ###############################################################################
 # Install Ingress NGINX

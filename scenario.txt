@@ -8,73 +8,53 @@ This is my scenario:
     - issuer: "self-signed-issuer", secret: "k8s-local-cert-secret" in local overlay
     - current resources
 
- k8s
-├──  infra
-│  ├──  base
-│  │  ├──  apicurio-registry
-│  │  │  ├──  apicurio-registry.yaml
-│  │  │  ├──  kustomization.yaml
-│  │  │  └──  namespace.yaml
-│  │  ├──  cert-manager
-│  │  │  ├──  kustomization.yaml
-│  │  │  └──  namespace.yaml
-│  │  ├──  external-dns
-│  │  │  ├──  clusterrole.yaml
-│  │  │  ├──  clusterrolebinding.yaml
-│  │  │  ├──  deployment.yaml
-│  │  │  ├──  kustomization.yaml
-│  │  │  ├──  namespace.yaml
-│  │  │  └──  serviceaccount.yaml
-│  │  ├──  kafka
-│  │  │  ├──  connect.yaml
-│  │  │  ├──  kafka.yaml
-│  │  │  ├──  kustomization.yaml
-│  │  │  ├──  namespace.yaml
-│  │  │  └──  topic.yaml
-│  │  ├──  kafka-ui
-│  │  │  ├──  deployment.yaml
-│  │  │  ├──  ingress.yaml
-│  │  │  ├──  kustomization.yaml
-│  │  │  ├──  namespace.yaml
-│  │  │  └──  service.yaml
-│  │  ├──  mysql
-│  │  │  ├──  conf.d
-│  │  │  │  └──  cdc.cnf
-│  │  │  ├──  initdb.d
-│  │  │  │  └──  debezium_setup.sql
-│  │  │  ├──  deployment.yaml
-│  │  │  ├──  kustomization.yaml
-│  │  │  ├──  namespace.yaml
-│  │  │  ├──  persistentvolumeclaim.yaml
-│  │  │  └──  service.yaml
-│  └──  overlays
-│     ├──  local
-│     │  ├──  apicurio-registry
-│     │  │  └──  kustomization.yaml
-│     │  ├──  cert-manager
-│     │  │  ├──  certificate.yaml
-│     │  │  ├──  issuer.yaml
-│     │  │  └──  kustomization.yaml
-│     │  ├──  external-dns
-│     │  │  ├──  deployment-patch.yaml
-│     │  │  └──  kustomization.yaml
-│     │  ├──  kafka
-│     │  │  └──  kustomization.yaml
-│     │  ├──  kafka-ui
-│     │  │  └──  kustomization.yaml
-│     │  ├──  mysql
-│     │  │  ├──  deployment-patch.yaml
-│     │  │  ├──  kustomization.yaml
-│     │  │  └──  service-patch.yaml
-│     │  └──  kustomization.yaml
-│     ├──  production
-│     │  ├──  external-dns
-│     │  │  ├──  deployment-patch.yaml
-│     │  │  └──  kustomization.yaml
-│     │  └──  kustomization.yaml
-│     └──  stage
-│        ├──  external-dns
-│        │  ├──  deployment-patch.yaml
-│        │  └──  kustomization.yaml
-│        └──  kustomization.yaml
-└──  lakehouse
+ k8s
+├─infra
+│  ├─base
+│  │  ├─cert-manager
+│  │  │  ├─kustomization.yaml
+│  │  │  └─namespace.yaml
+│  │  ├─external-dns
+│  │  │  ├─clusterrole.yaml
+│  │  │  ├─clusterrolebinding.yaml
+│  │  │  ├─deployment.yaml
+│  │  │  ├─kustomization.yaml
+│  │  │  ├─namespace.yaml
+│  │  │  └─serviceaccount.yaml
+│  │  ├─mysql
+│  │  │  ├─conf.d
+│  │  │  │  └── cdc.cnf
+│  │  │  ├─initdb.d
+│  │  │  │  └── debezium_setup.sql
+│  │  │  ├─deployment.yaml
+│  │  │  ├─kustomization.yaml
+│  │  │  ├─namespace.yaml
+│  │  │  ├─persistentvolumeclaim.yaml
+│  │  │  └─service.yaml
+│  └─overlays
+│     ├─local
+│     │  ├─cert-manager
+│     │  │  ├─certificate.yaml
+│     │  │  ├─issuer.yaml
+│     │  │  └─kustomization.yaml
+│     │  ├─external-dns
+│     │  │  ├─deployment-patch.yaml
+│     │  │  └─kustomization.yaml
+│     │  ├─mysql
+│     │  │  ├─deployment-patch.yaml
+│     │  │  ├─kustomization.yaml
+│     │  │  └─service-patch.yaml
+│     │  └─kustomization.yaml
+│     ├─production
+│     │  ├─external-dns
+│     │  │  ├─deployment-patch.yaml
+│     │  │  └─kustomization.yaml
+│     │  └─kustomization.yaml
+│     └─stage
+│        ├─external-dns
+│        │  ├─deployment-patch.yaml
+│        │  └─kustomization.yaml
+│        └─kustomization.yaml
+└── lakehouse
+
+I want to deploy a images.k8s.local docker-registry accessible internal and external to the k8s cluster, avoid using 5000 port, use the same address internal and external, must be able to recover a image build from external docker inside k3d cluster

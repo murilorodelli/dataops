@@ -3,6 +3,7 @@ kind: Deployment
 metadata:
   name: external-dns
 spec:
+  replicas: 1
   strategy:
     type: Recreate
   selector:

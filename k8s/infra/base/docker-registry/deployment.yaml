@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: docker-registry
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: docker-registry
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: docker-registry
+    spec:
+      containers:
+        - name: registry
+          image: registry:2
+          ports:
+            - containerPort: 80 # Listening on port 80 instead of 5000
+          volumeMounts:
+            - name: registry-storage
+              mountPath: /var/lib/registry
+          env:
+            - name: REGISTRY_HTTP_ADDR
+              value: ":80" # Set the registry to listen on port 80
+            - name: REGISTRY_STORAGE_DELETE_ENABLED
+              value: "true" # Enable the ability to delete images
+          resources:
+            requests:
+              cpu: 100m
+              memory: 100Mi
+            limits:
+              cpu: 200m
+              memory: 200Mi
+      volumes:
+        - name: registry-storage
+          persistentVolumeClaim:
+            claimName: docker-registry-pvc
