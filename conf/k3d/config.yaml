@@ -27,6 +27,15 @@ ports:
   - port: 9094:9094
     nodeFilters:
       - loadbalancer
+  - port: 9095:9095
+    nodeFilters:
+      - loadbalancer
+  - port: 9096:9096
+    nodeFilters:
+      - loadbalancer
+  - port: 9097:9097
+    nodeFilters:
+      - loadbalancer
 env:
   - envVar: DEPLOY_ENV=${DEPLOY_ENV}
     nodeFilters:

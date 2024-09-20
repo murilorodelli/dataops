@@ -4,8 +4,6 @@ This is my scenario:
     - k3d kubernetes cluster
     - I use kustomize for resource deployment
     - k8s.local domain in bind9 managed by external-dns
-    - self issued certificate managed by cert-manager
-    - issuer: "self-signed-issuer", secret: "k8s-local-cert-secret" in local overlay
     - current resources
 
  k8s

@@ -15,29 +15,51 @@ spec:
         port: 9093
         type: internal
         tls: true
+
       # - name: external
       #   port: 9094
       #   type: loadbalancer
       #   tls: true
+      #   authentication:
+      #     type: tls
       #   configuration:
-      #     bootstrap:
-      #       annotations:
-      #         external-dns.alpha.kubernetes.io/hostname: kafka-bootstrap.k8s.local.
-      #       alternativeNames:
-      #         - kafka-bootstrap.k8s.local
       #     brokers:
       #       - broker: 0
-      #         annotations:
-      #           external-dns.alpha.kubernetes.io/hostname: kafka-broker-0.k8s.local.
-      #         advertisedHost: kafka-broker-0.k8s.local
+      #         advertisedPort: 9095
       #       - broker: 1
-      #         annotations:
-      #           external-dns.alpha.kubernetes.io/hostname: kafka-broker-1.k8s.local.
-      #         advertisedHost: kafka-broker-1.k8s.local
+      #         advertisedPort: 9096
       #       - broker: 2
-      #         annotations:
-      #           external-dns.alpha.kubernetes.io/hostname: kafka-broker-2.k8s.local.
-      #         advertisedHost: kafka-broker-2.k8s.local
+      #         advertisedPort: 9097
+
+      # - name: external
+      #   port: 30994
+      #   type: nodeport
+      #   tls: true
+      #   configuration:
+      #     brokers:
+      #       - broker: 0
+      #         nodePort: 31090
+      #       - broker: 1
+      #         nodePort: 31091
+      #       - broker: 2
+      #         nodePort: 31092
+
+      # - name: external
+      #   port: 9094
+      #   type: ingress
+      #   tls: true
+      #   configuration:
+      #     bootstrap:
+      #       host: integrationhub-kafka-bootstrap.k8s.local
+      #     brokers:
+      #       - broker: 0
+      #         host: integrationhub-kafka-0.k8s.local
+      #       - broker: 1
+      #         host: integrationhub-kafka-1.k8s.local
+      #       - broker: 2
+      #         host: integrationhub-kafka-2.k8s.local
+      #     class: nginx
+
     config:
       offsets.topic.replication.factor: 3
       transaction.state.log.replication.factor: 3
@@ -47,19 +69,10 @@ spec:
       inter.broker.protocol.version: "3.8"
     storage:
       type: ephemeral
-      # type: jbod
-      # volumes:
-      #   - id: 0
-      #     type: persistent-claim
-      #     size: 2Gi
-      #     deleteClaim: true
   zookeeper:
     replicas: 3
     storage:
       type: ephemeral
-      # type: persistent-claim
-      # size: 2Gi
-      # deleteClaim: true
   entityOperator:
     topicOperator: {}
     userOperator: {}

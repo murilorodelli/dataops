@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 set -Eeuo pipefail
+
 trap cleanup SIGINT SIGTERM ERR EXIT
 
 # Define colors
@@ -165,6 +166,18 @@ fi
 #     error "Failed to install Cert Manager Operator."
 # fi
 
+##############################################################################
+# Install Flink Operator
+##############################################################################
+
+log "Installing Flink Operator..."
+
+if kubectl create -f https://operatorhub.io/install/alpha/flink-kubernetes-operator.yaml; then
+    success "Flink Operator installed successfully."
+else
+    error "Failed to install Flink Operator."
+fi
+
 ###############################################################################
 # Install Ingress NGINX
 ###############################################################################
@@ -173,6 +186,8 @@ log "Installing Ingress NGINX using Helm..."
 
 helm upgrade --install ingress-nginx ingress-nginx \
     --repo https://kubernetes.github.io/ingress-nginx \
-    --namespace ingress-nginx --create-namespace || error "Failed to install Ingress NGINX."
+    --namespace ingress-nginx --create-namespace \
+    --set controller.enableSSLPassthrough=true ||
+    echo "Failed to install Ingress NGINX."
 
 success "Ingress NGINX installed successfully."

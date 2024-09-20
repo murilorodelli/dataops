@@ -108,6 +108,7 @@ packages=(
     kubeconform
     k9s
     minio-mc
+    jq
 )
 
 log "Updating linuxbrew..."
