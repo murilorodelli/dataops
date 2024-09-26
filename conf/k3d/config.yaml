@@ -1,7 +1,7 @@
 apiVersion: k3d.io/v1alpha5
 kind: Simple
 servers: 1
-agents: 3
+agents: 0
 kubeAPI:
   hostIP: "0.0.0.0"
   hostPort: "6445"
@@ -43,17 +43,24 @@ env:
   - envVar: DEPLOY_ENV=${DEPLOY_ENV}
     nodeFilters:
       - all
-# registries:
-#   create:
-#     name: registry
-#     host: "0.0.0.0"
-#     hostPort: "5000"
-#     # proxy:
-#     #   remoteURL: https://registry-1.docker.io
-#     #   username: ""
-#     #   password: ""
-#     volumes:
-#       - ${HOME}/.k3d/registry:/var/lib/registry
+registries:
+  # create:
+  #   name: registry
+  #   host: "0.0.0.0"
+  #   hostPort: "5000"
+  #   # proxy:
+  #   #   remoteURL: https://registry-1.docker.io
+  #   #   username: ""
+  #   #   password: ""
+  #   volumes:
+  #     - ${HOME}/.k3d/registry:/var/lib/registry
+  create:
+    name: local-registry
+  config: |
+    mirrors:
+      "images.k8s.local:5000":
+        endpoint:
+          - http://images.k8s.local:5000
 options:
   k3d:
     wait: true
