@@ -3,6 +3,9 @@ kind: Kustomization
 
 resources:
   - ../../../base/docker-registry
-  - ingress.yaml
 
 namespace: docker-registry
+
+patches:
+  - path: deployment-patch.yaml
+  - path: service-patch.yaml

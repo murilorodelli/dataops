@@ -18,13 +18,11 @@ spec:
         - name: registry
           image: registry:2
           ports:
-            - containerPort: 80 # Listening on port 80 instead of 5000
+            - containerPort: 5000
           volumeMounts:
             - name: registry-storage
               mountPath: /var/lib/registry
           env:
-            - name: REGISTRY_HTTP_ADDR
-              value: ":80" # Set the registry to listen on port 80
             - name: REGISTRY_STORAGE_DELETE_ENABLED
               value: "true" # Enable the ability to delete images
           resources:

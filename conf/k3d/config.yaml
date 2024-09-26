@@ -24,6 +24,9 @@ ports:
   - port: 3306:3306
     nodeFilters:
       - loadbalancer
+  - port: 5000:5000
+    nodeFilters:
+      - loadbalancer
   - port: 9094:9094
     nodeFilters:
       - loadbalancer

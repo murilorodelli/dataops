@@ -19,7 +19,6 @@ SUCCESS_ICON=""
 ERROR_ICON=""
 ARROW_ICON=""
 
-
 cleanup() {
     trap - SIGINT SIGTERM ERR
     # Perform script cleanup here
@@ -103,6 +102,13 @@ if ! getent group docker >/dev/null; then
     sudo groupadd docker || error "Failed to create Docker group"
 fi
 sudo usermod -aG docker "$interactive_user" || error "Failed to add user to Docker group"
+
+# add insecure registry
+log "Adding insecure registry..."
+sudo mkdir -p /etc/docker || error "Failed to create /etc/docker directory"
+echo '{
+  "insecure-registries": ["images.k8s.local:5000"]
+}' | sudo tee /etc/docker/daemon.json || error "Failed to add insecure registry"
 
 # Inform the user about the need to log out and back in
 log "Please log out and back in or restart your session to apply Docker group membership changes."
