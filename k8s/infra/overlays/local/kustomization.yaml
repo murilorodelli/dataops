@@ -10,3 +10,4 @@ resources:
   - kafka
   - kafka-ui
   # - apicurio-registry
+  - flink

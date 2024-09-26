@@ -5,72 +5,25 @@ metadata:
 spec:
   kafka:
     version: 3.8.0
-    replicas: 3
+    replicas: 1
     listeners:
       - name: plain
         port: 9092
         type: internal
         tls: false
-      - name: tls
-        port: 9093
-        type: internal
-        tls: true
-
       # - name: external
       #   port: 9094
       #   type: loadbalancer
-      #   tls: true
-      #   authentication:
-      #     type: tls
-      #   configuration:
-      #     brokers:
-      #       - broker: 0
-      #         advertisedPort: 9095
-      #       - broker: 1
-      #         advertisedPort: 9096
-      #       - broker: 2
-      #         advertisedPort: 9097
-
-      # - name: external
-      #   port: 30994
-      #   type: nodeport
-      #   tls: true
-      #   configuration:
-      #     brokers:
-      #       - broker: 0
-      #         nodePort: 31090
-      #       - broker: 1
-      #         nodePort: 31091
-      #       - broker: 2
-      #         nodePort: 31092
-
-      # - name: external
-      #   port: 9094
-      #   type: ingress
-      #   tls: true
-      #   configuration:
-      #     bootstrap:
-      #       host: integrationhub-kafka-bootstrap.k8s.local
-      #     brokers:
-      #       - broker: 0
-      #         host: integrationhub-kafka-0.k8s.local
-      #       - broker: 1
-      #         host: integrationhub-kafka-1.k8s.local
-      #       - broker: 2
-      #         host: integrationhub-kafka-2.k8s.local
-      #     class: nginx
-
+      #   tls: false
     config:
-      offsets.topic.replication.factor: 3
-      transaction.state.log.replication.factor: 3
-      transaction.state.log.min.isr: 2
-      default.replication.factor: 3
-      min.insync.replicas: 2
+      offsets.topic.replication.factor: 1
+      transaction.state.log.replication.factor: 1
+      transaction.state.log.min.isr: 1
       inter.broker.protocol.version: "3.8"
     storage:
       type: ephemeral
   zookeeper:
-    replicas: 3
+    replicas: 1
     storage:
       type: ephemeral
   entityOperator:

@@ -1,3 +1,4 @@
+---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -14,18 +15,91 @@ metadata:
     app.kubernetes.io/version: 1.6.0
   name: flink
 rules:
+  # Core API Group Permissions
   - apiGroups:
       - ""
     resources:
       - pods
+      - pods/log
+      - pods/exec
+      - pods/portforward
       - configmaps
+      - secrets
+      - services
+      - events
+      - persistentvolumeclaims
+      - persistentvolumes
+      - serviceaccounts
     verbs:
       - "*"
+
+  # Apps API Group Permissions
   - apiGroups:
       - apps
     resources:
       - deployments
       - deployments/finalizers
+      - daemonsets
+      - replicasets
+      - statefulsets
+      - deployments/status
+      - daemonsets/status
+      - replicasets/status
+      - statefulsets/status
+      - events
+    verbs:
+      - "*"
+
+  # Batch API Group Permissions
+  - apiGroups:
+      - batch
+    resources:
+      - jobs
+      - cronjobs
+    verbs:
+      - "*"
+
+  # Networking API Group Permissions
+  - apiGroups:
+      - networking.k8s.io
+    resources:
+      - ingresses
+      - networkpolicies
+    verbs:
+      - "*"
+
+  # Autoscaling API Group Permissions
+  - apiGroups:
+      - autoscaling
+    resources:
+      - horizontalpodautoscalers
+    verbs:
+      - "*"
+
+  # Custom Resource Definitions (CRDs)
+  - apiGroups:
+      - flink.apache.org # Replace with the actual API group of Flink CRDs
+    resources:
+      - flinkdeployments
+      - flinkdeployments/status
+      - flinkdeployments/finalizers
+    verbs:
+      - "*"
+
+  # Additional API Groups and Resources (Optional)
+  - apiGroups:
+      - monitoring.coreos.com
+    resources:
+      - servicemonitors
+    verbs:
+      - "*"
+  - apiGroups:
+      - rbac.authorization.k8s.io
+    resources:
+      - roles
+      - rolebindings
+      - clusterroles
+      - clusterrolebindings
     verbs:
       - "*"
 ---

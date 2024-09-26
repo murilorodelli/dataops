@@ -68,6 +68,7 @@ log "System packages have been upgraded successfully."
 
 # Define the packages to be installed
 packages=(
+    software-properties-common
     bash
     bash-completion
     bat
@@ -122,6 +123,17 @@ log "Starting package installation..."
 
 # Install all packages at once
 if sudo apt-get install --assume-yes --quiet --no-install-recommends "${packages[@]}"; then
+    success "Successfully installed all packages: ${packages[*]}"
+else
+    error "Failed to install one or more packages: ${packages[*]}"
+fi
+
+# add deadsnakes PPA for Python 3.7
+log "Adding deadsnakes PPA for Python 3.7..."
+sudo add-apt-repository --yes ppa:deadsnakes/ppa || error "Failed to add deadsnakes PPA for Python 3.7"
+log "deadsnakes PPA has been added successfully."
+
+if sudo apt-get install --assume-yes --quiet --no-install-recommends python3.7 python3.7-venv binfmt-support; then
     success "Successfully installed all packages: ${packages[*]}"
 else
     error "Failed to install one or more packages: ${packages[*]}"
