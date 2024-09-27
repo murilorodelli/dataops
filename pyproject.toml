@@ -1,0 +1,66 @@
+[tool.black]
+    line-length = 120
+    target-version = ['py310']
+    include = '\.pyi?$'
+    # extend-exclude = '''
+    # /(
+    #   | tests
+    #   | profiling
+    # )/
+    # '''
+
+[tool.isort]
+    atomic = true
+    profile = "black"
+    line_length = 120
+    skip_gitignore = true
+    skip_glob = [".git", "__pycache__", "venv", "build", "dist"]
+
+[tool.bandit]
+    exclude_dirs = [".git", "__pycache__", "venv", "build", "dist", "docs"]
+    # empty means all tests
+    tests = []
+    skips = ["B101", "B608"]
+
+[tool.mypy]
+    ignore_missing_imports = true
+    disallow_untyped_defs = true
+    warn_unused_ignores = true
+    warn_unused_configs = true
+    exclude = [".git", "__pycache__", "venv", "build", "dist", "docs", "tests"]
+
+[tool.pydocstyle]
+    inherit = false
+    match = ".*\\.py"
+    # ignore missing docstrings
+    ignore = "D100,D101,D102,D103,D104,D107,D203,D205,D212,D213,D400"
+
+[tool.radon]
+    exclude = [".git", "__pycache__", "venv", "build", "dist", "docs", "tests"]
+
+[tool.pylint.format]
+    max-line-length = 120
+
+[tool.pylint.messages_control]
+    disable = [
+        "line-too-long",
+        "missing-class-docstring",
+        "missing-function-docstring",
+        "missing-module-docstring",
+    ]
+
+[tool.pylint.basic]
+    good-names = ["i", "j", "k", "ex", "Run", "_run", "_"]
+
+
+[tool.pylint]
+    load-plugins = [
+        "pylint.extensions.mccabe",
+        "pylint.extensions.docparams"
+    ]
+
+[tool.pylint.reports]
+    reports = false
+
+[tool.pylint.design]
+    max-args = 10

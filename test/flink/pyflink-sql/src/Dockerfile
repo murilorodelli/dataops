@@ -1,26 +1,28 @@
-FROM flink:1.16
+FROM flink:1.18.1
 
 # install python3: it has updated Python to 3.9 in Debian 11 and so install Python 3.7 from source, \
 # it currently only supports Python 3.6, 3.7 and 3.8 in PyFlink officially.
 
 RUN apt-get update -y && \
     apt-get install -y build-essential libssl-dev zlib1g-dev libbz2-dev libffi-dev && \
-    wget https://www.python.org/ftp/python/3.7.9/Python-3.7.9.tgz && \
-    tar -xvf Python-3.7.9.tgz && \
-    cd Python-3.7.9 && \
+    wget https://www.python.org/ftp/python/3.8.20/Python-3.8.20.tgz && \
+    tar -xvf Python-3.8.20.tgz && \
+    cd Python-3.8.20 && \
     ./configure --without-tests --enable-shared && \
     make -j6 && \
     make install && \
     ldconfig /usr/local/lib && \
-    cd .. && rm -f Python-3.7.9.tgz && rm -rf Python-3.7.9 && \
+    cd .. && rm -f Python-3.8.20.tgz && rm -rf Python-3.8.20 && \
     ln -s /usr/local/bin/python3 /usr/local/bin/python && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
 # install PyFlink
-RUN pip3 install "apache-flink>=1.16.0,<1.17.1"
+RUN pip3 install "apache-flink==1.18.1"
+
+RUN wget https://repo.maven.apache.org/maven2/org/apache/flink/flink-connector-kafka/3.2.0-1.18/flink-connector-kafka-3.2.0-1.18.jar -P /opt/flink/lib
 
 # add python script
 USER flink
 RUN mkdir /opt/flink/usrlib
-ADD python_demo.py /opt/flink/usrlib/python_demo.py
+ADD main.py /opt/flink/usrlib/main.py

@@ -1,0 +1,42 @@
+# Include common dependencies
+-r common.txt
+
+# Formatting and linting dependencies
+astroid                     # Common library for static analysis
+bandit[toml]                # Security-oriented static analysis tool
+black                       # Python code formatter
+flake8                      # Tool for enforcing PEP 8 compliance
+isort                       # Python import sorter
+mypy                        # Optional static typing for Python
+pydocstyle                  # Docstring style checker
+pylint                      # Source code analyzer
+radon                       # Code complexity and maintainability analysis
+pre-commit                  # Git hook manager to enforce code quality
+tox                         # Automated testing across multiple environments
+
+# Airflow lint
+airflint                    # Linting tool for Apache Airflow DAGs
+
+# Test dependencies
+mock                        # Mocking and testing library
+pytest                      # Testing framework
+pytest-mock                 # Plugin for pytest to simplify mocking
+coverage                    # Code coverage measurement
+hypothesis                  # Property-based testing
+pytest-cov                  # Coverage plugin for pytest
+pytest-xdist                # Parallel test execution using multiple CPUs
+tox-travis                  # Simplifies tox integration with Travis CI
+
+# Scripting dependencies
+Jinja2                      # Template engine for Python
+PyYAML                      # YAML parser and emitter for Python
+
+# Documentation dependencies
+sphinx                      # Documentation generator
+sphinx-rtd-theme            # Theme for Sphinx documentation
+sphinx-autodoc-typehints    # Include type hints in Sphinx documentation
+
+# Development tools
+ipython                     # Enhanced interactive Python shell
+notebook                    # Jupyter Notebook support
+pip-tools                   # Tool to help manage requirements.txt files

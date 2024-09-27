@@ -1,0 +1,25 @@
+# Utility packages
+wheel                        # A built-package format for Python
+
+# Database connectors
+mysql-connector-python       # MySQL database connector for Python
+psycopg2-binary              # PostgreSQL database adapter for Python
+
+# AWS integration
+boto3                        # AWS SDK for Python
+
+# Delta Lake interaction
+deltalake                    # Work with Delta Lake tables without Spark
+pyarrow                      # Columnar data format, often used with Parquet
+
+# Apache Spark integration
+pyspark[sql]                 # Python API for Apache Spark
+delta-spark                  # Delta Lake integration with Apache Spark
+
+# Data manipulation and scientific computing
+pandas                       # Data analysis and manipulation library
+numpy                        # Fundamental package for scientific computing in Python
+
+pyyaml
+
+apache-flink==1.18.1

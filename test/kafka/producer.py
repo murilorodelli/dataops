@@ -1,5 +1,5 @@
-import ssl
 import os
+import ssl
 
 from kafka import KafkaProducer
 
